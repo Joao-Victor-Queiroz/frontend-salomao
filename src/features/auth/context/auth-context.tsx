@@ -1,6 +1,7 @@
+"use client";
 import { useContext, createContext, useState} from 'react';
 import { UserType } from '../types/user-type';
-import { signIn } from '../services/auth-service';
+import { handleLoginAction } from '../actions/auth-actions';
 import { useMutation } from '@tanstack/react-query';
 import { LoginSchemaFormType } from '../schemas'
 import { useRouter } from 'next/navigation';
@@ -15,16 +16,21 @@ type AuthContextType = {
 
 export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
-export function AuthProvider({ children } : { children: React.ReactNode }){
-    const [user, setUser] = useState<UserType | null>(null);
+export function AuthProvider({ children, initialUser } : { children: React.ReactNode; initialUser: UserType | null}){
+    const [user, setUser] = useState<UserType | null>(initialUser);
     const router = useRouter();
 
+    console.log("Usuário do contexto: ", user);
+    console.log("Usuário inicial: ", initialUser);
+
     const loginMutation = useMutation({
-        mutationFn: (data: LoginSchemaFormType) => signIn(data),
+        mutationFn: (data: LoginSchemaFormType) => handleLoginAction(data),
         onSuccess: (data) => {
-            setUser(data.user);
-            localStorage.setItem("token", data.access_token);
-            router.push("/dashboard");
+            if (data.success && data.user) {
+                setUser(data.user);
+                router.refresh();
+                router.push("/dashboard");
+            }
         },
         onError: (error: Error) => {
             console.log('ERRO AO FAZER LOGIN:', error.message)

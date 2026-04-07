@@ -1,10 +1,10 @@
 import { LoginSchemaFormType } from "../schemas";
 import { LoginResponseType } from "../types";
 
-const baseURL = process.env.BASE_URL;
+const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 if (!baseURL)
-  throw new Error("A BASE_URL não definida nas variáveis de ambiente.");
+  throw new Error("A BASE_URL não foi definida nas variáveis de ambiente.");
 
 export async function signIn(
   data: LoginSchemaFormType,
@@ -14,7 +14,6 @@ export async function signIn(
     headers: {
       "Content-Type": "application/json",
     },
-    credentials: "include",
     body: JSON.stringify(data),
   });
 

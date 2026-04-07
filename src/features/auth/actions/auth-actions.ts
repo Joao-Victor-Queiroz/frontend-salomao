@@ -23,7 +23,11 @@ export async function handleLoginAction(data: LoginSchemaFormType) {
     });
   }
 
-    return { success: true };
+  if (!result.user) {
+    throw new Error("Resposta do servidor não contém informações do usuário.")
+  }
+
+    return { success: true, user: result.user};
   }
 
   return { error: "Falha no login" };
