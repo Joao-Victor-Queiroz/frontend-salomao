@@ -8,26 +8,26 @@ export async function handleLoginAction(data: LoginSchemaFormType) {
   const cookiesStore = await cookies();
 
   if (result.accessToken) {
-
     cookiesStore.set("token", result.accessToken, {
       httpOnly: true,
       secure: false,
       sameSite: "strict",
     });
 
-      if(result.refreshToken) {
-    cookiesStore.set("refreshToken", result.refreshToken, {
+    if (result.refreshToken) {
+      cookiesStore.set("refreshToken", result.refreshToken, {
         httpOnly: true,
         secure: false,
         sameSite: "strict",
-    });
-  }
+      });
+    }
 
-  if (!result.user) {
-    throw new Error("Resposta do servidor não contém informações do usuário.")
-  }
-
-    return { success: true, user: result.user};
+    if (!result.user) {
+      throw new Error(
+        "Resposta do servidor não contém informações do usuário.",
+      );
+    }
+    return { success: true, user: result.user };
   }
 
   return { error: "Falha no login" };

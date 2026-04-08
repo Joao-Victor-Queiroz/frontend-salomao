@@ -27,6 +27,7 @@ export function AuthProvider({ children, initialUser } : { children: React.React
         mutationFn: (data: LoginSchemaFormType) => handleLoginAction(data),
         onSuccess: (data) => {
             if (data.success && data.user) {
+                console.log('O onSuccess foi chamado com sucesso:', data);
                 setUser(data.user);
                 router.refresh();
                 router.push("/dashboard");
@@ -49,7 +50,7 @@ export function AuthProvider({ children, initialUser } : { children: React.React
             user, 
             isAuthenticated: !!user, 
             isLoading: loginMutation.isPending, 
-            signIn: loginMutation.mutate, 
+            signIn: loginMutation.mutateAsync, 
             signOut }}>
             {children}
         </AuthContext.Provider>

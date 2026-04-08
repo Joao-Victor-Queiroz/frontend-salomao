@@ -6,24 +6,27 @@ import { useForm } from 'react-hook-form';
 import { LoginSchemaFormType, loginSchemaForm } from '../schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
-import { handleLoginAction } from '../actions/auth-actions';
+import { useAuth } from '../context';
 
 export function LoginForm() {
     const {register, handleSubmit, formState: { isSubmitting } } = useForm<LoginSchemaFormType>({
         resolver: zodResolver(loginSchemaForm)
     })
 
+    const { signIn } = useAuth();
+
     const onSubmit = async (data: LoginSchemaFormType) => {
         console.log("A função foi chamada")
-        const result = await handleLoginAction(data);
+        const result = await signIn(data);
+        console.log('Resultado: ',result)
 
-        if(result.error) {
-            console.error('Erro ao fazer login:', result.error);
-        }
+        // if() {
+        //     console.error('Erro ao fazer login:', result.error);
+        // }
 
-        if(result.success){
-            console.log('Login bem-sucedido!');
-        }
+        // if(result.success){
+        //     console.log('Login bem-sucedido!');
+        // }
         
     }
 
