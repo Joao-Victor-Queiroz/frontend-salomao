@@ -40,7 +40,6 @@ export function AuthProvider({ children, initialUser } : { children: React.React
 
     const signOut = () => {
         setUser(null);
-        localStorage.removeItem("token");
         router.push("/");
     }
 

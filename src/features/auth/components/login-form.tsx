@@ -13,7 +13,7 @@ export function LoginForm() {
         resolver: zodResolver(loginSchemaForm)
     })
 
-    const { signIn } = useAuth();
+    const { signIn, isLoading } = useAuth();
 
     const onSubmit = async (data: LoginSchemaFormType) => {
         console.log("A função foi chamada")
@@ -32,7 +32,7 @@ export function LoginForm() {
 
     return(
         <main className='bg-linear-to-t from-red-500 to-amber-200 min-h-screen w-full p-8 grid place-items-center'>
-            <form className='p-6 bg-white rounded-2xl w-full max-w-md gap-10 grid place-items-center' onSubmit={handleSubmit(onSubmit)}>
+            <form className='p-6 bg-white rounded-2xl w-full max-w-md gap-10 grid place-items-center shadow-[12px_15px_10px_-5px_rgba(0,0,0,0.15)]' onSubmit={handleSubmit(onSubmit)}>
                 <h1 className='font-extrabold text-2xl mb-4 text-center text-primary-red'>LOGIN</h1>
                 <Field>
                     <FieldLabel htmlFor='email' className='font-bold'>Email</FieldLabel>
@@ -41,7 +41,7 @@ export function LoginForm() {
                     <FieldLabel htmlFor='password' className='font-bold'>Senha</FieldLabel>
                     <Input id='password' type='password' placeholder='Digite sua senha...' {...register('password')} />
                 </Field>
-                <Button className='bg-primary-red w-full mt-4 rounded-4xl' disabled={isSubmitting} type='submit'>
+                <Button className='bg-primary-red w-full h-10 mt-4 rounded-b-md' disabled={isSubmitting || isLoading} type='submit'>
                     Entrar
                 </Button>
             <Link href='#' className='text-sm font-medium pb-8 hover:underline'>

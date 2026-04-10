@@ -50,6 +50,7 @@ export default async function RootLayout({
 
   const user = await getMe();
 
+
   return (
     <html
       lang="en"
