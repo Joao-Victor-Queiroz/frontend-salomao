@@ -40,7 +40,7 @@ export function AppSidebar() {
             const isCurrentActive = pathname === item.url
 
             return (
-               <SidebarMenuItem key={item.url} className="p-2">
+              <SidebarMenuItem key={item.url} className="p-2">
               <SidebarMenuButton tooltip={item.title} 
               isActive={isCurrentActive}
               render={

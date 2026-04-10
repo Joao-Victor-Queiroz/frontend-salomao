@@ -1,5 +1,5 @@
 "use client";
-import { useContext, createContext, useState} from 'react';
+import { useContext, createContext, useState, useEffect} from 'react';
 import { UserType } from '../types/user-type';
 import { handleLoginAction } from '../actions/auth-actions';
 import { useMutation } from '@tanstack/react-query';
@@ -19,6 +19,10 @@ export const AuthContext = createContext<AuthContextType>({} as AuthContextType)
 export function AuthProvider({ children, initialUser } : { children: React.ReactNode; initialUser: UserType | null}){
     const [user, setUser] = useState<UserType | null>(initialUser);
     const router = useRouter();
+
+    useEffect(() => {
+        setUser(initialUser);
+    }, [initialUser]);
 
     console.log("Usuário do contexto: ", user);
     console.log("Usuário inicial: ", initialUser);

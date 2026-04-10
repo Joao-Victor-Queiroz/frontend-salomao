@@ -3,10 +3,10 @@ import { useAuth } from "@/features/auth"
 import { SectionTitle } from "@/components/section-title";
 
 export function ProfilePage() {
-    const { user } = useAuth();
+    const { user, isLoading } = useAuth();
 
-    if(!user) {
-        return <p>Usuário está null {user}</p>
+    if(!user || isLoading) {
+        return <p>Usuário está undefined.</p>
     }
 
     return(
