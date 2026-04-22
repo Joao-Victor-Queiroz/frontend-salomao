@@ -1,0 +1,28 @@
+"use server"
+
+import { cookies } from "next/headers"
+
+export async function getCrismandos(){
+    const cookiesStore = await cookies()
+
+    const token = cookiesStore.get("token")?.value
+
+    if(!token) {
+        return { error: "Token não encontrado"};
+    }
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/crismando/todos-crismandos`, {
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error("Falha ao buscar crismandos")
+    }
+
+    console.log(response)
+
+    return response.json()
+}

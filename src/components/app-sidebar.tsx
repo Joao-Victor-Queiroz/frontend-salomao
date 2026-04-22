@@ -9,7 +9,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import {LayoutDashboard, User} from "lucide-react"
+import {LayoutDashboard, User, Users} from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
@@ -24,6 +24,11 @@ const items = [
     url: "/dashboard/profile",
     icon: User,
   },
+  {
+    title: "Crismandos",
+    url: "/dashboard/crismandos",
+    icon: Users,
+  }
 ]
 
 export function AppSidebar() {
