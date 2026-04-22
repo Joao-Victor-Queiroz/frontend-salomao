@@ -1,7 +1,9 @@
+"use client"
 import { Crismando } from '../types'; 
 import { SectionTitle } from '@/components/section-title';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
+import { useRouter } from 'next/navigation';
 
 type CrismandComGrupo = Crismando & {
     nomeGrupo: string;
@@ -12,6 +14,8 @@ type Props = {
 }
 
 export function ListaCrismandos({crismandos} : Props) {
+    const router = useRouter();
+
     return (
         <div>
             <SectionTitle title="Crismandos" />
@@ -45,7 +49,7 @@ export function ListaCrismandos({crismandos} : Props) {
                             <p>{crismando.primeiraEucaristia}</p>
                         </CardContent>
                         <CardFooter>
-                            <Button>
+                            <Button onClick={() => router.push(`/dashboard/crismandos/${crismando.id}`)}>
                                 Ver detalhes
                             </Button>
                         </CardFooter>
