@@ -43,3 +43,22 @@ export async function handleLogoutAction() {
     await logOut(refreshToken);
   }
 }
+
+export async function updateSession(token: string, newRefreshToken: string) {
+  const cookiesStore = await cookies();
+
+  cookiesStore.set("token", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: 'lax',
+    path: '/'
+  })
+  
+
+  cookiesStore.set("refreshToken", newRefreshToken, {
+     httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: 'lax',
+    path: '/'
+  })
+}
