@@ -27,3 +27,19 @@ export async function signIn(
 
   return result;
 }
+
+
+export async function logOut(refreshToken: string) {
+  const response = await fetch(`${baseURL}/auth/logout`, {
+    method: "POST",
+    body: JSON.stringify({ refreshToken }),
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.message || "Erro desconhecido ao fazer logout");
+  }
+
+  return result;
+}

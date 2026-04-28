@@ -1,35 +1,45 @@
 "use server"
 
 import { cookies } from "next/headers"
+import { apiAxios } from "@/lib/api"
+import { CrismandoComGrupo } from "../components";
 
 
 export async function getCrismandos(){
+    const api = await apiAxios();
+
+    const response = await api.get("/crismando/todos-crismandos");
+
+    return response.data as CrismandoComGrupo[];
+}
+
+// export async function getCrismandos(){
 
     
-const cookiesStore = await cookies()
+// const cookiesStore = await cookies()
 
-const token = cookiesStore.get("token")?.value
+// const token = cookiesStore.get("token")?.value
 
-    if(!token) {
-        return { error: "Token não encontrado"};
-    }
+//     if(!token) {
+//         return { error: "Token não encontrado"};
+//     }
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/crismando/todos-crismandos`, {
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
-    });
+//     const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/crismando/todos-crismandos`, {
+//         headers: {
+//             "Content-Type": "application/json",
+//             Authorization: `Bearer ${token}`,
+//         },
+//     });
 
-    if (!response.ok) {
-        throw new Error("Falha ao buscar crismandos")
-    }
+//     if (!response.ok) {
+//         throw new Error("Falha ao buscar crismandos")
+//     }
 
-    console.log(response)
+//     console.log(response)
 
-    return response.json()
+//     return response.json()
 
-}
+// }
 
 export async function getCrismandoById(id: string){
     

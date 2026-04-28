@@ -1,7 +1,8 @@
 "use server";
-import { signIn } from "../services/auth-service";
+import { logOut, signIn } from "../services/auth-service";
 import { cookies } from "next/headers";
 import { LoginSchemaFormType } from "../schemas";
+
 
 export async function handleLoginAction(data: LoginSchemaFormType) {
   const result = await signIn(data);
@@ -31,4 +32,14 @@ export async function handleLoginAction(data: LoginSchemaFormType) {
   }
 
   return { error: "Falha no login" };
+}
+
+
+export async function handleLogoutAction() {
+  const cookiesStore = await cookies();
+  const refreshToken = cookiesStore.get("refreshToken")?.value;
+
+  if (refreshToken) {
+    await logOut(refreshToken);
+  }
 }

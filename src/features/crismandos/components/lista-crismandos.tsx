@@ -5,12 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { useRouter } from 'next/navigation';
 
-type CrismandComGrupo = Crismando & {
+export type CrismandoComGrupo = Crismando & {
     nomeGrupo: string;
 }
 
 type Props = {
-    crismandos: CrismandComGrupo[];
+    crismandos: CrismandoComGrupo[];
 }
 
 export function ListaCrismandos({crismandos} : Props) {
@@ -34,7 +34,7 @@ export function ListaCrismandos({crismandos} : Props) {
                     </Card>
                 ))}
             </div> */}
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 {crismandos.length > 0 ? (
                     crismandos.map((crismando) => (
                         <Card key={crismando.id}>
