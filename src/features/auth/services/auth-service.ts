@@ -2,11 +2,12 @@ import { LoginSchemaFormType } from "../schemas";
 import { LoginResponseType } from "../types";
 import { getBaseUrl } from "@/lib/base-url";
 
+const baseURL = getBaseUrl().toString();
 
 export async function signIn(
   data: LoginSchemaFormType,
 ): Promise<LoginResponseType> {
-  const response = await fetch(`${getBaseUrl}/auth/signin`, {
+  const response = await fetch(`${baseURL}/auth/signin`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -27,7 +28,7 @@ export async function signIn(
 
 
 export async function logOut(refreshToken: string) {
-  const response = await fetch(`${getBaseUrl}/auth/logout`, {
+  const response = await fetch(`${baseURL}/auth/logout`, {
     method: "POST",
     body: JSON.stringify({ refreshToken }),
   });

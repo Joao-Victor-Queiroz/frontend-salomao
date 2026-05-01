@@ -4,6 +4,7 @@ import { SectionTitle } from '@/components/section-title';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { useRouter } from 'next/navigation';
+import { UserPlus } from 'lucide-react'
 
 export type CrismandoComGrupo = Crismando & {
     nomeGrupo: string;
@@ -19,22 +20,10 @@ export function ListaCrismandos({crismandos} : Props) {
     return (
         <div>
             <SectionTitle title="Crismandos" />
-            {/* <div>
-                {crismandos.map((crismando) => (
-                    <Card key={crismando.id}>
-                        <CardHeader>
-                            <CardTitle>{crismando.nomeCrismando}</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <p>{crismando.idade}</p>
-                            <p>{crismando.dataNascimento}</p>
-                            <p>{crismando.batizado}</p>
-                            <p>{crismando.primeiraEucaristia}</p>
-                        </CardContent>
-                    </Card>
-                ))}
-            </div> */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <Button className='bg-primary-red px-6 py-4'>
+                <UserPlus/> Adicionar crismando
+            </Button>
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
                 {crismandos.length > 0 ? (
                     crismandos.map((crismando) => (
                         <Card key={crismando.id}>
@@ -43,7 +32,6 @@ export function ListaCrismandos({crismandos} : Props) {
                         </CardHeader>
                         <CardContent>
                             <p>{crismando.idade} anos</p>
-                            <p>{new Date(crismando.dataNascimento).toLocaleDateString('pt-BR')}</p>
                             <p>{crismando.nomeGrupo}</p>
                             <p>{crismando.batizado}</p>
                             <p>{crismando.primeiraEucaristia}</p>

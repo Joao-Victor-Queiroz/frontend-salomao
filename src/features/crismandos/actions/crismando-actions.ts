@@ -5,10 +5,10 @@ import { apiAxios } from "@/lib/api"
 import { CrismandoComGrupo } from "../components";
 
 
-export async function getCrismandos(){
+export async function getCrismandos(query?: {page?: number, limit?: number}){
     const api = await apiAxios();
 
-    const response = await api.get("/crismando/todos-crismandos");
+    const response = await api.get("/crismando/todos-crismandos", {params: query});
 
     return response.data as CrismandoComGrupo[];
 }
@@ -42,27 +42,9 @@ export async function getCrismandos(){
 // }
 
 export async function getCrismandoById(id: string){
-    
-const cookiesStore = await cookies()
+    const api = await apiAxios();
 
-const token = cookiesStore.get("token")?.value
+    const response = await api.get(`/crismando/${id}`)
 
-    if(!token){
-        return { error: "Token não encontrado"}
-    }
-
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/crismando/${id}`, {
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-        }
-    })
-
-      if (!response.ok) {
-        throw new Error("Falha ao buscar crismandos")
-    }
-
-    console.log(response)
-
-    return response.json()
+    return response.data as CrismandoComGrupo;
 }
