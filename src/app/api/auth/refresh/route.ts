@@ -23,7 +23,7 @@ export async function POST(){
             body: JSON.stringify({ refreshToken }),
         }
         )
-        const data = await response.json() as any; // Usamos any para pegar refreshToken se o backend enviar assim
+        const data = await response.json();
         console.log("Resposta do servidor: ", data);
 
         if(!response.ok) {
