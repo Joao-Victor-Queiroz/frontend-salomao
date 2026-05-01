@@ -1,15 +1,12 @@
 import { LoginSchemaFormType } from "../schemas";
 import { LoginResponseType } from "../types";
+import { getBaseUrl } from "@/lib/base-url";
 
-const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
-
-if (!baseURL)
-  throw new Error("A BASE_URL não foi definida nas variáveis de ambiente.");
 
 export async function signIn(
   data: LoginSchemaFormType,
 ): Promise<LoginResponseType> {
-  const response = await fetch(`${baseURL}/auth/signin`, {
+  const response = await fetch(`${getBaseUrl}/auth/signin`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -30,7 +27,7 @@ export async function signIn(
 
 
 export async function logOut(refreshToken: string) {
-  const response = await fetch(`${baseURL}/auth/logout`, {
+  const response = await fetch(`${getBaseUrl}/auth/logout`, {
     method: "POST",
     body: JSON.stringify({ refreshToken }),
   });
