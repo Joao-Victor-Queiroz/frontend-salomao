@@ -1,10 +1,10 @@
 "use client"
 import { Crismando } from '../types'; 
-import { SectionTitle } from '@/components/section-title';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { useRouter } from 'next/navigation';
-import { UserPlus } from 'lucide-react'
+import { useState } from 'react';
+
 
 export type CrismandoComGrupo = Crismando & {
     nomeGrupo: string;
@@ -15,17 +15,25 @@ type Props = {
 }
 
 export function ListaCrismandos({crismandos} : Props) {
+    const [visibleCount, setVisibleCount] = useState(8);
+    const [searchName, setSearchName] = useState("");
     const router = useRouter();
+
+    const filteredList = crismandos.filter((crismando) => 
+        crismando.nomeCrismando.toLowerCase().includes(searchName.toLocaleLowerCase())
+    ).sort((a, b) => a.nomeCrismando.localeCompare(b.nomeCrismando));
+
+    const displayedElements = filteredList.slice(0, visibleCount);
+
+    const handleLoadMore = () => {
+        setVisibleCount(prev => prev + 8);
+    }
 
     return (
         <div>
-            <SectionTitle title="Crismandos" />
-            <Button className='bg-primary-red px-6 py-4'>
-                <UserPlus/> Adicionar crismando
-            </Button>
             <div className="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
-                {crismandos.length > 0 ? (
-                    crismandos.map((crismando) => (
+                {displayedElements.length > 0 ? (
+                    displayedElements.map((crismando) => (
                         <Card key={crismando.id}>
                         <CardHeader>
                             <CardTitle>{crismando.nomeCrismando}</CardTitle>
@@ -47,6 +55,11 @@ export function ListaCrismandos({crismandos} : Props) {
                     <p>Não há crismandos cadastrados.</p>
                 )}
             </div>
+            { visibleCount < filteredList.length && (
+            <Button onClick={handleLoadMore} className='mt-4 w-full bg-primary-red'>
+                Carregar mais
+            </Button>
+            )}
         </div>
     )
 }

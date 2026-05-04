@@ -16,18 +16,8 @@ export function LoginForm() {
     const { signIn, isLoading } = useAuth();
 
     const onSubmit = async (data: LoginSchemaFormType) => {
-        console.log("A função foi chamada")
         const result = await signIn(data);
         console.log('Resultado: ',result)
-
-        // if() {
-        //     console.error('Erro ao fazer login:', result.error);
-        // }
-
-        // if(result.success){
-        //     console.log('Login bem-sucedido!');
-        // }
-        
     }
 
     return(

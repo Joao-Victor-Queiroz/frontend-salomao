@@ -1,14 +1,13 @@
 "use server"
 
-import { cookies } from "next/headers"
 import { apiAxios } from "@/lib/api"
 import { CrismandoComGrupo } from "../components";
 
 
-export async function getCrismandos(query?: {page?: number, limit?: number}){
+export async function getCrismandos(){
     const api = await apiAxios();
 
-    const response = await api.get("/crismando/todos-crismandos", {params: query});
+    const response = await api.get("/crismando/todos-crismandos");
 
     return response.data as CrismandoComGrupo[];
 }
