@@ -1,10 +1,11 @@
 "use client";
-import { useContext, createContext, useState} from 'react';
+import { useContext, createContext, useState, useEffect} from 'react';
 import { UserType } from '../types/user-type';
 import { handleLoginAction } from '../actions/auth-actions';
 import { useMutation } from '@tanstack/react-query';
 import { LoginSchemaFormType } from '../schemas'
 import { useRouter } from 'next/navigation';
+import { getProfile } from "@/features/auth";
 
 type AuthContextType = {
     user: UserType | null;
@@ -16,13 +17,25 @@ type AuthContextType = {
 
 export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
-export function AuthProvider({ children } : { children: React.ReactNode;}){
+export function AuthProvider({ children} : { children: React.ReactNode;}){
     const [user, setUser] = useState<UserType | null>(null);
+    const [isResolving, setIsResolving] = useState(true);
     const router = useRouter();
 
-    // useEffect(() => {
-    //     setUser(null);
-    // }, [user]);
+    useEffect(() => {
+       async function loadUser(){
+        try {
+            const response = await getProfile();
+
+            if(response.data) setUser(response.data)
+        } catch (error) {
+            setUser(null);
+        }finally {
+            setIsResolving(false);
+        }
+       }
+       loadUser();
+    }, []);
 
     console.log("Usuário do contexto: ", user);
  
@@ -52,7 +65,7 @@ export function AuthProvider({ children } : { children: React.ReactNode;}){
         <AuthContext.Provider value={{ 
             user, 
             isAuthenticated: !!user, 
-            isLoading: loginMutation.isPending, 
+            isLoading: isResolving || loginMutation.isPending, 
             signIn: loginMutation.mutateAsync, 
             signOut }}>
             {children}

@@ -2,7 +2,16 @@
 import { logOut, signIn } from "../services/auth-service";
 import { cookies } from "next/headers";
 import { LoginSchemaFormType } from "../schemas";
+import { apiAxios } from '@/lib/api';
 
+
+export async function getProfile(){
+  const api = apiAxios();
+
+  const response = (await api).get('/auth/me')
+
+  return (await response).data;
+}
 
 export async function handleLoginAction(data: LoginSchemaFormType) {
   const result = await signIn(data);
