@@ -11,9 +11,6 @@ export default async function CrismandosPage() {
     return (
         <div>
             <SectionTitle title="Crismandos" />
-            <Button className='bg-primary-red px-6 py-4'>
-                <UserPlus/> Adicionar crismando
-            </Button>
             <Suspense  fallback={<CrismandosSkeleton />}>
                 <CrismandosContainer  />
             </Suspense>

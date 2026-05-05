@@ -10,14 +10,14 @@ id: string;
   estadoNascimento: string;
   endereco: string;
   numEndereco: string;
-  complemento?: string; // Opcional
+  complemento?: string; 
   bairro: string;
   cep: string;
   telefoneCrismando: string;
   nomePai: string;
   nomeMae: string;
-  telefonePai?: string; // Opcional
-  telefoneMae?: string; // Opcional
+  telefonePai?: string;
+  telefoneMae?: string; 
   batizado: 'Sim' | 'Não';
   primeiraEucaristia: 'Sim' | 'Não';
   justificativa: string;

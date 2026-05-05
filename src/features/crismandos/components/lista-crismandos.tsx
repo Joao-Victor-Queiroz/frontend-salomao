@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { UserPlus, Search} from 'lucide-react';
+import { Input } from '@/components/ui/input';
 
 
 export type CrismandoComGrupo = Crismando & {
@@ -20,7 +22,7 @@ export function ListaCrismandos({crismandos} : Props) {
     const router = useRouter();
 
     const filteredList = crismandos.filter((crismando) => 
-        crismando.nomeCrismando.toLowerCase().includes(searchName.toLocaleLowerCase())
+        crismando.nomeCrismando.toLowerCase().startsWith(searchName.toLocaleLowerCase())
     ).sort((a, b) => a.nomeCrismando.localeCompare(b.nomeCrismando));
 
     const displayedElements = filteredList.slice(0, visibleCount);
@@ -31,6 +33,21 @@ export function ListaCrismandos({crismandos} : Props) {
 
     return (
         <div>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-4 w-[50%]'>
+            <Button className='bg-primary-red px-6 py-4 w-full' onClick={() => router.push('/dashboard/crismandos/register')}>
+                <UserPlus/> Adicionar crismando
+            </Button>
+            <Input 
+                icon={Search}
+                placeholder='Buscar crismando...'
+                value={searchName}
+                onChange={(e) => {
+                    setSearchName(e.target.value)
+                    setVisibleCount(8)
+                }}
+                className='w-full'
+            />
+            </div>
             <div className="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
                 {displayedElements.length > 0 ? (
                     displayedElements.map((crismando) => (
