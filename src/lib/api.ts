@@ -110,6 +110,8 @@ export async function apiAxios() {
                 failedRequestQueue.forEach((request) => request.onFailure(err));
                 failedRequestQueue = [];
                 handleLogoutAction();
+
+                throw new Error('Sua sessão expirou. Por favor, faça login novamente.')
               })
               .finally(() => {
                 isRefreshing = false;

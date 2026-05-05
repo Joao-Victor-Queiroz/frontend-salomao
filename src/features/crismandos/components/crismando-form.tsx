@@ -2,11 +2,13 @@
 import { Input } from "@/components/ui/input";
 import { Field, FieldLabel } from '@/components/ui/field';
 import { Button } from '@/components/ui/button';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller} from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CrismandoSchemaType, crismandoSchema } from "../schemas";
 import { FileText, User, Phone, Hash, Calendar, Map, MapPin, Home, Heart, BookOpen } from "lucide-react";
 import { SectionTitle } from "@/components/section-title";
+import { IMaskInput } from 'react-imask';
+import { cn } from "@/lib/utils";
 
 type FormType = "REGISTER" | "EDIT"
 
@@ -16,11 +18,12 @@ type Props = {
 }
 
 export function CrismandoForm({ type, initialValues}: Props) {
-    const {handleSubmit, register, formState: { isSubmitting, errors}} = useForm<CrismandoSchemaType>({
+    const {handleSubmit, register, control, formState: { isSubmitting, errors}} = useForm<CrismandoSchemaType>({
         resolver: zodResolver(crismandoSchema),
         defaultValues: initialValues,
         mode: 'onChange',
     })
+
 
     const onSubmit = (data: CrismandoSchemaType) => {
         console.log(data);
@@ -56,7 +59,23 @@ export function CrismandoForm({ type, initialValues}: Props) {
 
                 <Field>
                     <FieldLabel>Telefone</FieldLabel>
-                    <Input placeholder="(00) 00000-0000" error={errors.telefoneCrismando?.message} {...register('telefoneCrismando')} />
+                    <Controller 
+                        control={control}
+                        name="telefoneCrismando"
+                        render={({field: {onChange, value}}) => (
+                            // <Input placeholder="(00) 00000-0000" error={errors.telefoneCrismando?.message} {...register('telefoneCrismando', )} />
+                            <IMaskInput 
+                                mask="(00) 00000-0000"
+                                value={value}
+                                onAccept={(value) => onChange(value)}
+                                placeholder="Telefone do crismando"
+                                className={cn(
+                                            "h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40" 
+                                )}
+                                {...register('telefoneCrismando')}
+                            />
+                        )}
+                    />
                 </Field>
 
                 <div className="grid grid-cols-3 gap-2 md:col-span-1">
@@ -94,7 +113,22 @@ export function CrismandoForm({ type, initialValues}: Props) {
           </Field>
           <Field>
             <FieldLabel>CEP</FieldLabel>
-            <Input placeholder="00000-000" error={errors.cep?.message} {...register('cep')} />
+               <Controller 
+                        control={control}
+                        name="cep"
+                        render={({field: {onChange, value}}) => (
+                            <IMaskInput 
+                                mask="00000-000"
+                                value={value}
+                                onAccept={(value) => onChange(value)}
+                                placeholder="CEP"
+                                className={cn(
+                                            "h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40" 
+                                )}
+                                {...register('cep')}
+                            />
+                        )}
+                    />
           </Field>
           <Field>
             <FieldLabel>Complemento</FieldLabel>
@@ -115,7 +149,22 @@ export function CrismandoForm({ type, initialValues}: Props) {
           </Field>
           <Field>
             <FieldLabel>Telefone do Pai</FieldLabel>
-            <Input placeholder="Opcional" error={errors.telefonePai?.message} {...register('telefonePai')} />
+               <Controller 
+                        control={control}
+                        name="telefonePai"
+                        render={({field: {onChange, value}}) => (
+                            <IMaskInput 
+                                mask="(00) 00000-0000"
+                                value={value}
+                                onAccept={(value) => onChange(value)}
+                                placeholder="Telefone do pai"
+                                className={cn(
+                                            "h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40" 
+                                )}
+                                {...register('telefonePai')}
+                            />
+                        )}
+                    />
           </Field>
           <Field>
             <FieldLabel>Nome da Mãe</FieldLabel>
@@ -123,7 +172,22 @@ export function CrismandoForm({ type, initialValues}: Props) {
           </Field>
           <Field>
             <FieldLabel>Telefone da Mãe</FieldLabel>
-            <Input placeholder="Opcional" error={errors.telefoneMae?.message} {...register('telefoneMae')} />
+               <Controller 
+                        control={control}
+                        name="telefoneMae"
+                        render={({field: {onChange, value}}) => (
+                            <IMaskInput 
+                                mask="(00) 00000-0000"
+                                value={value}
+                                onAccept={(value) => onChange(value)}
+                                placeholder="Telefone da mãe"
+                                className={cn(
+                                            "h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40" 
+                                )}
+                                {...register('telefoneMae')}
+                            />
+                        )}
+                    />
           </Field>
         </div>
       </section>
