@@ -3,7 +3,7 @@
 import { apiAxios } from "@/lib/api"
 import { CrismandoComGrupo } from "../components";
 import { CrismandoSchemaType } from "../schemas";
-
+import { revalidatePath } from "next/cache";
 
 export async function getCrismandos(){
     const api = await apiAxios();
@@ -54,11 +54,13 @@ export async function registerCrismando(data: CrismandoSchemaType) {
         const api = await apiAxios();
 
         const response = await api.post('/crismando/criar-crismando', data);
+        
 
+        revalidatePath('dashboard/crismandos')
         return { success: true, data: response.data, message: 'Crismando cadastrado com sucesso!'}
     } catch (error: any) {
         const errorMessage = error.response?.data?.message || 'Erro desconhecido';
 
-        return { sucess: false, message: errorMessage}
+        return { success: false, message: errorMessage}
     }
 }

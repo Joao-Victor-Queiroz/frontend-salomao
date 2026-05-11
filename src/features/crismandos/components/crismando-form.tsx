@@ -9,6 +9,8 @@ import { FileText, User, Phone, Hash, Calendar, Map, MapPin, Home, Heart, BookOp
 import { SectionTitle } from "@/components/section-title";
 import { IMaskInput } from 'react-imask';
 import { cn } from "@/lib/utils";
+import { registerCrismando } from "../actions";
+import { useRouter } from 'next/navigation';
 
 type FormType = "REGISTER" | "EDIT"
 
@@ -18,15 +20,26 @@ type Props = {
 }
 
 export function CrismandoForm({ type, initialValues}: Props) {
-    const {handleSubmit, register, control, formState: { isSubmitting, errors}} = useForm<CrismandoSchemaType>({
+    const {handleSubmit, register, control, formState: { isSubmitting, errors, isLoading}} = useForm<CrismandoSchemaType>({
         resolver: zodResolver(crismandoSchema),
         defaultValues: initialValues,
         mode: 'onChange',
     })
 
+    const router = useRouter();
 
-    const onSubmit = (data: CrismandoSchemaType) => {
-        console.log(data);
+
+    const onSubmit = async(data: CrismandoSchemaType) => {
+       console.log('Função de registro chamada')
+       const result = await registerCrismando(data)
+
+       if(!result.success){
+        return console.log('Erro ao cadastrar crismando')
+       }
+
+       router.back();
+
+       return console.log('Crismando registrado com sucesso: ', data);
     }
 
     return (
@@ -62,17 +75,17 @@ export function CrismandoForm({ type, initialValues}: Props) {
                     <Controller 
                         control={control}
                         name="telefoneCrismando"
-                        render={({field: {onChange, value}}) => (
+                        render={({field: {onChange, value, ref}}) => (
                             // <Input placeholder="(00) 00000-0000" error={errors.telefoneCrismando?.message} {...register('telefoneCrismando', )} />
                             <IMaskInput 
                                 mask="(00) 00000-0000"
                                 value={value}
                                 onAccept={(value) => onChange(value)}
                                 placeholder="Telefone do crismando"
+                                inputRef={ref}
                                 className={cn(
                                             "h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40" 
                                 )}
-                                {...register('telefoneCrismando')}
                             />
                         )}
                     />
@@ -125,7 +138,6 @@ export function CrismandoForm({ type, initialValues}: Props) {
                                 className={cn(
                                             "h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40" 
                                 )}
-                                {...register('cep')}
                             />
                         )}
                     />
@@ -152,16 +164,16 @@ export function CrismandoForm({ type, initialValues}: Props) {
                <Controller 
                         control={control}
                         name="telefonePai"
-                        render={({field: {onChange, value}}) => (
+                        render={({field: {onChange, value, ref}}) => (
                             <IMaskInput 
                                 mask="(00) 00000-0000"
                                 value={value}
                                 onAccept={(value) => onChange(value)}
                                 placeholder="Telefone do pai"
+                                inputRef={ref}
                                 className={cn(
                                             "h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40" 
                                 )}
-                                {...register('telefonePai')}
                             />
                         )}
                     />
@@ -175,16 +187,16 @@ export function CrismandoForm({ type, initialValues}: Props) {
                <Controller 
                         control={control}
                         name="telefoneMae"
-                        render={({field: {onChange, value}}) => (
+                        render={({field: {onChange, value, ref}}) => (
                             <IMaskInput 
                                 mask="(00) 00000-0000"
                                 value={value}
                                 onAccept={(value) => onChange(value)}
                                 placeholder="Telefone da mãe"
+                                inputRef={ref}
                                 className={cn(
                                             "h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40" 
                                 )}
-                                {...register('telefoneMae')}
                             />
                         )}
                     />
@@ -238,8 +250,8 @@ export function CrismandoForm({ type, initialValues}: Props) {
           </div>
         </div>
       </section>
-            <Button type="submit" disabled={isSubmitting} className="w-full">
-                {isSubmitting ? 'Criando...' : 'Criar'}
+            <Button type="submit" disabled={isSubmitting || isLoading} className="w-full">
+                {isSubmitting ? 'Criando...' : 'Criar crismando(a)'}
             </Button>
         </form>
     )
