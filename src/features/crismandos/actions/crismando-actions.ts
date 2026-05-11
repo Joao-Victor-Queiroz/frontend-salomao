@@ -4,6 +4,8 @@ import { apiAxios } from "@/lib/api"
 import { CrismandoComGrupo } from "../components";
 import { CrismandoSchemaType } from "../schemas";
 import { revalidatePath } from "next/cache";
+import { isAxiosError } from 'axios';
+
 
 export async function getCrismandos(){
     const api = await apiAxios();
@@ -58,8 +60,14 @@ export async function registerCrismando(data: CrismandoSchemaType) {
 
         revalidatePath('dashboard/crismandos')
         return { success: true, data: response.data, message: 'Crismando cadastrado com sucesso!'}
-    } catch (error: any) {
-        const errorMessage = error.response?.data?.message || 'Erro desconhecido';
+    } catch (error: unknown) {
+        let errorMessage = 'Erro desconhecido';
+
+        if (isAxiosError(error)) {
+            errorMessage = error.response?.data?.message || errorMessage;
+        } else if (error instanceof Error) {
+            errorMessage = error.message;
+        }
 
         return { success: false, message: errorMessage}
     }
