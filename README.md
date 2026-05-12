@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Projeto Salomão - Front-End
 
-## Getting Started
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![React Query](https://img.shields.io/badge/React_Query-FF4154?style=for-the-badge&logo=reactquery&logoColor=white)
 
-First, run the development server:
+## Sobre o Projeto
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+O **Projeto Salomão** nasceu com um objetivo claro: modernizar e centralizar a gestão de dados, eliminando o uso exaustivo de planilhas manuais. A dependência de processos descentralizados frequentemente resultava em dados inconsistentes, dificuldade na manutenção das informações e baixa eficiência no dia a dia.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Com este sistema, a ideia é fornecer uma ferramenta robusta e acessível, trazendo segurança, agilidade e confiabilidade para a gestão de todos os processos envolvidos.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Arquitetura e Decisões Técnicas
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+O projeto inicialmente começou a tomar forma no universo mobile, sendo construído com **React Native e Expo**. Contudo, visando a democratização do acesso e uma distribuição sem atritos, decidi migrar toda a aplicação para a web utilizando o framework **Next.js**.
 
-## Learn More
+Essa transição arquitetônica foi fundamental para garantir que o sistema pudesse ser acessado tranquilamente por qualquer pessoa através de um navegador. Assim, entregamos valor de forma imediata e universal, sem depender de instalações complexas ou publicações em lojas de aplicativos.
 
-To learn more about Next.js, take a look at the following resources:
+A stack de tecnologias foi escolhida com foco em performance, manutenibilidade e uma experiência de usuário (UX) fluida:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Next.js & React**: Para construção de interfaces dinâmicas, renderização otimizada e roteamento eficiente.
+- **Tailwind CSS**: Para uma estilização rápida, responsiva e altamente customizável.
+- **React Query & Axios**: Para o gerenciamento de estados assíncronos, cache de dados e requisições HTTP seguras.
+- **Zod & React Hook Form**: Garantindo tipagem rigorosa e validação segura de ponta a ponta na entrada de dados.
+- **Shadcn UI & Lucide React**: Para construção de componentes acessíveis e uma interface elegante.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Status do Projeto
 
-## Deploy on Vercel
+🚧 **Em Desenvolvimento** 🚧
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+A aplicação está em pleno desenvolvimento, ganhando novas formas e funcionalidades a cada ciclo. O roadmap para as próximas entregas inclui:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [ ] Registro e gerenciamento de grupos
+- [ ] Registro de caixinha e controle de frequência
+- [ ] Filtragem avançada de crismandos
+- [ ] Geração de relatórios
+
+## Como Executar Localmente
+
+Para testar e rodar o projeto na sua máquina, siga os passos abaixo:
+
+1. Clone este repositório:
+   ```bash
+   git clone https://github.com/Joao-Victor-Queiroz/frontend-salomao.git
+   ```
+2. Instale as dependências:
+   ```bash
+   npm install
+   # ou
+   pnpm install
+   ```
+3. Inicie o servidor de desenvolvimento:
+   ```bash
+   npm run dev
+   # ou
+   pnpm dev
+   ```
+4. Acesse [http://localhost:3000](http://localhost:3000) no seu navegador para ver o resultado.
