@@ -2,9 +2,13 @@
 
 ![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Context API](https://img.shields.io/badge/Context_API-000000?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
-![React Query](https://img.shields.io/badge/React_Query-FF4154?style=for-the-badge&logo=reactquery&logoColor=white)
+![Axios](https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white)
+![React Hook Form](https://img.shields.io/badge/React_Hook_Form-EC5990?style=for-the-badge&logo=reacthookform&logoColor=white)
+![Zod](https://img.shields.io/badge/Zod-3E67B1?style=for-the-badge&logo=zod&logoColor=white)
+![shadcn/ui](https://img.shields.io/badge/shadcn%2Fui-000000?style=for-the-badge&logo=shadcnui&logoColor=white)
 
 ## Sobre o Projeto
 
@@ -22,9 +26,15 @@ A stack de tecnologias foi escolhida com foco em performance, manutenibilidade e
 
 - **Next.js & React**: Para construção de interfaces dinâmicas, renderização otimizada e roteamento eficiente.
 - **Tailwind CSS**: Para uma estilização rápida, responsiva e altamente customizável.
-- **React Query & Axios**: Para o gerenciamento de estados assíncronos, cache de dados e requisições HTTP seguras.
+- **Context API & Axios**: Para o gerenciamento global de estados e comunicação segura com o back-end através de requisições HTTP e interceptors.
 - **Zod & React Hook Form**: Garantindo tipagem rigorosa e validação segura de ponta a ponta na entrada de dados.
 - **Shadcn UI & Lucide React**: Para construção de componentes acessíveis e uma interface elegante.
+
+## Desafios Técnicos Superados
+
+Um dos maiores desafios técnicos durante a construção desta versão web foi a implementação de um fluxo de autenticação seguro e contínuo. 
+
+Para lidar com a rotação de *Refresh Tokens*, desenvolvi uma arquitetura robusta baseada em **Cookies HTTP-Only e um Proxy interno** utilizando a API Routes do Next.js. Além disso, configurei um **Interceptor do Axios** (`apiWrapper`) no lado do cliente que monitora as respostas e detecta erros `401 Unauthorized`. Quando o token de acesso principal expira, o interceptor pausa as requisições pendentes, solicita silenciosamente um novo token através da nossa rota de proxy (renovando as credenciais no servidor e atualizando os cookies do cliente) e, em caso de sucesso, reprocessa as chamadas originais sem que o usuário perceba qualquer interrupção, garantindo uma experiência fluida, segura e ininterrupta.
 
 ## Status do Projeto
 
