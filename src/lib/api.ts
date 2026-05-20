@@ -2,6 +2,7 @@ import axios, { AxiosError } from "axios";
 import { cookies } from "next/headers";
 import { handleLogoutAction, updateSession } from "@/features/auth";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 let isRefreshing = false;
 
@@ -111,7 +112,7 @@ export async function apiAxios() {
                 failedRequestQueue = [];
                 handleLogoutAction();
 
-                throw new Error('Sua sessão expirou. Por favor, faça login novamente.')
+                redirect('/');
               })
               .finally(() => {
                 isRefreshing = false;
