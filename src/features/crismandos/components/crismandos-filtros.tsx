@@ -80,7 +80,7 @@ export function CrismandosFiltros({
                             className='mt-2'
                             >
                                 {options.map((option) => (
-                                    <div className='flex items-center gap-2'>
+                                    <div className='flex items-center gap-2' key={option.value}>
                                     <RadioGroupItem value={option} key={option.value} />
                                      <Label htmlFor={option.value}>{option.label}</Label> 
                                     </div>
@@ -95,7 +95,7 @@ export function CrismandosFiltros({
                             defaultValue='' className='mt-2'
                             >
                                 {options.map((option) => (
-                                    <div className='flex items-center gap-2'>
+                                    <div className='flex items-center gap-2' key={option.value}>
                                     <RadioGroupItem value={option} key={option.value} />
                                      <Label htmlFor={option.value}>{option.label}</Label> 
                                     </div>
