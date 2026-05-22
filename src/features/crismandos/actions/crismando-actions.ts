@@ -45,3 +45,24 @@ export async function registerCrismando(data: CrismandoSchemaType) {
         return { success: false, message: errorMessage}
     }
 }
+
+export async function editCrismando(data: CrismandoSchemaType, id: string){
+    try{
+        const api = await apiAxios();
+
+        const response = await api.patch(`/crismando/atualizar-crismando/${id}`, data)
+
+        revalidatePath('dashboard/crismandos')
+        return { success: true, data: response.data, message: 'Crismando atualizado com sucesso!'}
+    } catch (error: unknown) {
+        let errorMessage = 'Erro desconhecido';
+
+        if (isAxiosError(error)) {
+            errorMessage = error.response?.data?.message || errorMessage;
+        } else if (error instanceof Error) {
+            errorMessage = error.message;
+        }
+
+        return { success: false, message: errorMessage}
+    }
+}

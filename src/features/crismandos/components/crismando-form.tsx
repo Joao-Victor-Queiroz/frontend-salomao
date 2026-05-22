@@ -9,8 +9,8 @@ import { FileText, User, Phone, Hash, Calendar, Map, MapPin, Home, Heart, BookOp
 import { SectionTitle } from "@/components/section-title";
 import { IMaskInput } from 'react-imask';
 import { cn } from "@/lib/utils";
-import { registerCrismando } from "../actions";
-import { useRouter } from 'next/navigation';
+import { registerCrismando, editCrismando } from "../actions";
+import { useRouter, useParams } from 'next/navigation';
 import { toast } from "sonner";
 
 type FormType = "REGISTER" | "EDIT"
@@ -21,6 +21,7 @@ type Props = {
 }
 
 export function CrismandoForm({ type, initialValues}: Props) {
+    const params = useParams<{id: string}>();
     const {handleSubmit, register, control, formState: { isSubmitting, errors, isLoading}} = useForm<CrismandoSchemaType>({
         resolver: zodResolver(crismandoSchema),
         defaultValues: initialValues,
@@ -31,18 +32,34 @@ export function CrismandoForm({ type, initialValues}: Props) {
 
 
     const onSubmit = async(data: CrismandoSchemaType) => {
-       const result = await registerCrismando(data)
-       
+      if(type === 'REGISTER') {
+        const resultRegister = await registerCrismando(data)
+        
+        if(!resultRegister.success){
+         toast.error('Erro ao cadastrar crismando.')
+         return console.log('Erro ao cadastrar crismando')
+        }
+  
+        toast.success('Crismando cadastrado com sucesso!')
+        router.back();
+  
+        return console.log('Crismando registrado com sucesso: ', data);
+      }
 
-       if(!result.success){
-        toast.error('Erro ao cadastrar crismando.')
-        return console.log('Erro ao cadastrar crismando')
-       }
+      if(type === 'EDIT'){
+        const resultEdit = await editCrismando(data, params.id)
 
-       toast.success('Crismando cadastrado com sucesso!')
-       router.back();
+        if(!resultEdit.success){
+         toast.error('Erro ao atualizar crismando.')
+         return console.log('Erro ao atualizar crismando')
+        }
 
-       return console.log('Crismando registrado com sucesso: ', data);
+        toast.success('Crismando atualizado com sucesso!')
+        router.back();
+
+        return console.log('Crismando atualizado com sucesso: ', data);
+      }
+
     }
 
     return (
