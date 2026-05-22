@@ -31,7 +31,6 @@ export function CrismandoForm({ type, initialValues}: Props) {
 
 
     const onSubmit = async(data: CrismandoSchemaType) => {
-       console.log('Função de registro chamada')
        const result = await registerCrismando(data)
        
 
@@ -255,7 +254,10 @@ export function CrismandoForm({ type, initialValues}: Props) {
         </div>
       </section>
             <Button type="submit" disabled={isSubmitting || isLoading} className="w-full">
-                {isSubmitting ? 'Criando...' : 'Criar crismando(a)'}
+              {isSubmitting
+                ? { REGISTER: 'Criando...', EDIT: 'Editando...' }[type]
+                : { REGISTER: 'Criar crismando(a)', EDIT: 'Editar crismando(a)' }[type]
+              }
             </Button>
         </form>
     )

@@ -1,5 +1,7 @@
 import { SectionTitle } from "@/components/section-title";
 import { Crismando } from "../types";
+import  Link  from 'next/link';
+import { buttonVariants } from '@/components/ui/button';
 
 type Props = {
     crismando: Crismando;
@@ -9,7 +11,9 @@ export function CrismandoPageDetails({crismando} : Props) {
     return (
         <div>
             <SectionTitle  title={crismando.nomeCrismando} />
-
+            <Link href={`/dashboard/crismandos/${crismando.id}/edit`} className={buttonVariants()}>
+                Editar crismando 
+            </Link>
             <div>
                 <p>Idade: {crismando.idade} anos</p>
                 <p>Data de Nascimento: {crismando.dataNascimento}</p>
