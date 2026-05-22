@@ -101,9 +101,9 @@ export function ListaCrismandos({crismandos} : Props) {
                             <p>Eucaristia: {crismando.primeiraEucaristia}</p>
                         </CardContent>
                         <CardFooter>
-                            <Button onClick={() => router.push(`/dashboard/crismandos/${crismando.id}`)}>
+                            <Link href={`/dashboard/crismandos/${crismando.id}`} className={buttonVariants()}>
                                 Ver detalhes
-                            </Button>
+                            </Link>
                         </CardFooter>
                     </Card>
                     ))
