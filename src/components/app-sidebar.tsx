@@ -9,9 +9,10 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import {LayoutDashboard, User, Users} from "lucide-react"
+import {LayoutDashboard, User, Users, LogOut} from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useAuth } from "@/features/auth"
 
 const items = [
 {
@@ -33,11 +34,12 @@ const items = [
 
 export function AppSidebar() {
   const pathname = usePathname()
+  const {user, signOut} = useAuth()
 
   return (
     <Sidebar>
       <SidebarHeader>
-        <h1>HEADER DA SIDEBAR</h1>
+        <h1 className='font-bold text-xl'>Olá, {user?.nome}</h1>
         </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
@@ -60,7 +62,16 @@ export function AppSidebar() {
           })}
         </SidebarMenu>
       </SidebarContent>
-      <SidebarFooter />
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton tooltip="Sair" onClick={signOut} className='flex-end'>
+              <LogOut className="text-primary-red"/>
+              <span className="text-primary-red">Sair</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   )
 }

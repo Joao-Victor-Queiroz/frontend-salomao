@@ -20,24 +20,28 @@ type UserLoginType = Omit<UserType, 'id' | 'email' | 'password'>
 export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 export function AuthProvider({ children} : { children: React.ReactNode;}){
-    const [user, setUser] = useState<UserLoginType | null>(() => {
-        if (typeof window !== 'undefined') {
-            const isUserSaved = localStorage.getItem('user');
-            return isUserSaved ? JSON.parse(isUserSaved) : null;
-        }
-        return null;
-    });
+    const [user, setUser] = useState<UserLoginType | null>(null);
     const [isResolving, setIsResolving] = useState(true);
     const router = useRouter();
 
     useEffect(() => {
        async function loadUser(){
         try {
+            const isUserSaved = localStorage.getItem("user");
+
+            if(isUserSaved){
+                setUser(JSON.parse(isUserSaved))
+            }
+
             const response = await getProfile();
 
-            if(response.data) setUser(response.data)
+            if(response.data) {
+                setUser(response.data)
+                localStorage.setItem("user", JSON.stringify(response.data))
+            }
         } catch (error) {
             setUser(null);
+            localStorage.removeItem("user");
         }finally {
             setIsResolving(false);
         }
