@@ -26,14 +26,17 @@ export function ListaCrismandos({crismandos} : Props) {
     const [isFilterActive, setIsFilterActive] = useState<boolean>(false)
     const router = useRouter();
 
+    const normalizedSearch = searchName.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
     const filteredList = crismandos.filter((crismando) => {
-        const matchesName = crismando.nomeCrismando.toLowerCase().startsWith(searchName.toLowerCase());
+        const normalizedName = crismando.nomeCrismando.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        const matchesName = normalizedName.includes(normalizedSearch);
 
-        const matchesGrupo = gruposFilter.length === 0 || gruposFilter.includes(crismando.nomeGrupo)
+        const matchesGrupo = !gruposFilter.length || gruposFilter.includes(crismando.nomeGrupo)
 
-        const matchesBatizado = batizadoFilter === '' || crismando.batizado === batizadoFilter
+        const matchesBatizado = !batizadoFilter || crismando.batizado === batizadoFilter
 
-        const matchesEucaristia = eucaristiaFilter === '' || crismando.primeiraEucaristia === eucaristiaFilter
+        const matchesEucaristia = !eucaristiaFilter || crismando.primeiraEucaristia === eucaristiaFilter
 
         return matchesName && matchesGrupo && matchesBatizado && matchesEucaristia
     }
@@ -77,6 +80,15 @@ export function ListaCrismandos({crismandos} : Props) {
                 setEucaristiaSelected={setEucaristiaFilter}
             />
             </div>
+            {(searchName || gruposFilter.length > 0 || batizadoFilter || eucaristiaFilter) ? (
+                <div className="mt-4 flex flex-wrap gap-2 items-center text-sm">
+                    <span className="font-medium text-muted-foreground">Filtros ativos:</span>
+                    {searchName && <span className="bg-secondary text-secondary-foreground px-2.5 py-1 rounded-md text-xs font-medium">Nome: {searchName}</span>}
+                    {gruposFilter.length > 0 && <span className="bg-secondary text-secondary-foreground px-2.5 py-1 rounded-md text-xs font-medium">Grupos: {gruposFilter.join(', ')}</span>}
+                    {batizadoFilter && <span className="bg-secondary text-secondary-foreground px-2.5 py-1 rounded-md text-xs font-medium">Batizado: {batizadoFilter}</span>}
+                    {eucaristiaFilter && <span className="bg-secondary text-secondary-foreground px-2.5 py-1 rounded-md text-xs font-medium">Eucaristia: {eucaristiaFilter}</span>}
+                </div>
+            ) : null}
             <div className="mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {displayedElements.length > 0 ? (
                     displayedElements.map((crismando) => (
@@ -87,8 +99,8 @@ export function ListaCrismandos({crismandos} : Props) {
                         <CardContent>
                             <p>{crismando.idade} anos</p>
                             <p>{crismando.nomeGrupo}</p>
-                            <p>Batizado? {crismando.batizado}</p>
-                            <p>{crismando.primeiraEucaristia}</p>
+                            <p>Batismo: {crismando.batizado}</p>
+                            <p>Eucaristia: {crismando.primeiraEucaristia}</p>
                         </CardContent>
                         <CardFooter>
                             <Button onClick={() => router.push(`/dashboard/crismandos/${crismando.id}`)}>

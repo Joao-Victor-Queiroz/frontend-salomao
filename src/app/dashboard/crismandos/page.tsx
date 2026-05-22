@@ -9,10 +9,10 @@ import { UserPlus } from 'lucide-react'
 export default async function CrismandosPage() {
 
     return (
-        <div>
+        <div className="space-y-4">
             <SectionTitle title="Crismandos" />
-            <Suspense  fallback={<CrismandosSkeleton />}>
-                <CrismandosContainer  />
+            <Suspense fallback={<CrismandosSkeleton />}>
+                <CrismandosContainer />
             </Suspense>
         </div>
     )

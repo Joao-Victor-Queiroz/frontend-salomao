@@ -8,10 +8,11 @@ import {
     SheetFooter,
     SheetDescription,
 } from '@/components/ui/sheet'
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants} from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { SlidersHorizontal } from 'lucide-react';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { cn } from "@/lib/utils"
 
 type FilterProps = {
     gruposOptions: string[];
@@ -34,15 +35,21 @@ export function CrismandosFiltros({
 } : FilterProps){
     const options = [
         {label: 'Sim', value: 'Sim'},
-        {label: 'Não', value: 'Não'}
+        {label: 'Não', value: 'Não'},
+        {label: 'Todos', value: ''},
     ]
 
     return (
         <Sheet>
             <SheetTrigger>
-                <Button variant='outline' className='w-full'>
+               <div 
+                    className={cn(
+                        buttonVariants({ variant: "outline", size: "default" }), 
+                        "w-full"
+                    )}
+                >
                     <SlidersHorizontal /> Filtros
-                </Button>
+                </div>
             </SheetTrigger>
             <SheetContent>
                 <SheetHeader>
@@ -81,8 +88,8 @@ export function CrismandosFiltros({
                             >
                                 {options.map((option) => (
                                     <div className='flex items-center gap-2' key={option.value}>
-                                    <RadioGroupItem value={option} key={option.value} />
-                                     <Label htmlFor={option.value}>{option.label}</Label> 
+                                    <RadioGroupItem value={option.value} id={`batizado-${option.value}`} />
+                                     <Label htmlFor={`batizado-${option.value}`}>{option.label}</Label> 
                                     </div>
                                 ))}
                             </RadioGroup>
@@ -96,8 +103,8 @@ export function CrismandosFiltros({
                             >
                                 {options.map((option) => (
                                     <div className='flex items-center gap-2' key={option.value}>
-                                    <RadioGroupItem value={option} key={option.value} />
-                                     <Label htmlFor={option.value}>{option.label}</Label> 
+                                    <RadioGroupItem value={option.value} id={`eucaristia-${option.value}`} />
+                                     <Label htmlFor={`eucaristia-${option.value}`}>{option.label}</Label> 
                                     </div>
                                 ))}
                             </RadioGroup>
