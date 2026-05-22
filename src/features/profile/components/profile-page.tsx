@@ -11,8 +11,8 @@ export function ProfilePage() {
 
     return(
         <main>
-            <SectionTitle title={`Bem vindo(a), ${user?.nomeAnimador}!`}/>
-            <p>Bem-vindo ao seu perfil. {user?.email}</p>
+            <SectionTitle title={`Bem vindo(a), ${user.nome}!`}/>
+            <p>Bem-vindo ao seu perfil.</p>
         </main>
     )
 }

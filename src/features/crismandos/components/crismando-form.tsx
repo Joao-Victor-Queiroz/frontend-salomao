@@ -11,6 +11,7 @@ import { IMaskInput } from 'react-imask';
 import { cn } from "@/lib/utils";
 import { registerCrismando } from "../actions";
 import { useRouter } from 'next/navigation';
+import { toast } from "sonner";
 
 type FormType = "REGISTER" | "EDIT"
 
@@ -32,11 +33,14 @@ export function CrismandoForm({ type, initialValues}: Props) {
     const onSubmit = async(data: CrismandoSchemaType) => {
        console.log('Função de registro chamada')
        const result = await registerCrismando(data)
+       
 
        if(!result.success){
+        toast.error('Erro ao cadastrar crismando.')
         return console.log('Erro ao cadastrar crismando')
        }
 
+       toast.success('Crismando cadastrado com sucesso!')
        router.back();
 
        return console.log('Crismando registrado com sucesso: ', data);

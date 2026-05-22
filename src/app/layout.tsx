@@ -6,6 +6,7 @@ import "./globals.css";
 // import { cookies } from "next/headers";
 // import { UserType } from "@/features/auth";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/sonner"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -58,6 +59,7 @@ export default async function RootLayout({
             <AuthProvider>
               <TooltipProvider>
                 {children}
+                <Toaster />
               </TooltipProvider>
             </AuthProvider>
           </Providers>

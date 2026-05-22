@@ -8,17 +8,25 @@ import { useRouter } from 'next/navigation';
 import { getProfile } from "@/features/auth";
 
 type AuthContextType = {
-    user: UserType | null;
+    user: UserLoginType | null;
     isAuthenticated: boolean;
     isLoading: boolean;
     signIn: (data: LoginSchemaFormType) => void;
     signOut: () => void;
 }
 
+type UserLoginType = Omit<UserType, 'id' | 'email' | 'password'>
+
 export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 export function AuthProvider({ children} : { children: React.ReactNode;}){
-    const [user, setUser] = useState<UserType | null>(null);
+    const [user, setUser] = useState<UserLoginType | null>(() => {
+        if (typeof window !== 'undefined') {
+            const isUserSaved = localStorage.getItem('user');
+            return isUserSaved ? JSON.parse(isUserSaved) : null;
+        }
+        return null;
+    });
     const [isResolving, setIsResolving] = useState(true);
     const router = useRouter();
 
@@ -46,6 +54,7 @@ export function AuthProvider({ children} : { children: React.ReactNode;}){
             if (data.success && data.user) {
                 console.log('O onSuccess foi chamado com sucesso:', data);
                 setUser(data.user);
+                localStorage.setItem("user", JSON.stringify(data.user))
                 router.refresh();
                 router.push("/dashboard");
             }

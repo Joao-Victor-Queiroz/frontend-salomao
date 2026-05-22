@@ -23,7 +23,6 @@ export function ListaCrismandos({crismandos} : Props) {
     const [gruposFilter, setGruposFilter] = useState<string[]>([])
     const [batizadoFilter, setBatizadoFilter] = useState<'Sim' | 'Não' | ''>('')
     const [eucaristiaFilter, setEucaristiaFilter] = useState<'Sim' | 'Não' | ''>('')
-    const [isFilterActive, setIsFilterActive] = useState<boolean>(false)
     const router = useRouter();
 
     const normalizedSearch = searchName.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
