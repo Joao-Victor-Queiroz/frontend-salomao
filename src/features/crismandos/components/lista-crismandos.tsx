@@ -1,8 +1,10 @@
 "use client"
 import { Crismando } from '../types'; 
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { UserPlus, Search, SlidersHorizontal} from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -63,12 +65,9 @@ export function ListaCrismandos({crismandos} : Props) {
                 }}
                 className='w-full'
             />
-            <Button className='bg-primary-red px-6 py-4 w-full' onClick={() => router.push('/dashboard/crismandos/register')}>
+            <Link href='/dashboard/crismandos/register' className={cn(buttonVariants(), 'bg-primary-red px-6 py-4 w-full')}>
                 <UserPlus/> Adicionar crismando
-            </Button>
-            {/* <Button variant={isFilterActive ? 'default' : 'outline'} onClick={() => setIsFilterActive(!isFilterActive)} className={isFilterActive ? 'bg-primary-red text-white' : ''}>
-                <SlidersHorizontal /> Filtros
-            </Button> */}
+            </Link>
             <CrismandosFiltros
                 gruposOptions={gruposOptions}
                 gruposSelected={gruposFilter}
@@ -93,7 +92,7 @@ export function ListaCrismandos({crismandos} : Props) {
                     displayedElements.map((crismando) => (
                         <Card key={crismando.id}>
                         <CardHeader>
-                            <CardTitle>{primeiroEUltimoNome(crismando.nomeCrismando)}</CardTitle>
+                            <CardTitle className='line-clamp-1'>{crismando.nomeCrismando}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <p>{crismando.idade} anos</p>
