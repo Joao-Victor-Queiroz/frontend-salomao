@@ -21,7 +21,7 @@ export function LoginForm() {
     }
 
     return(
-        <main className='bg-linear-to-t from-red-500 to-amber-200 min-h-screen w-full p-8 grid place-items-center'>
+        <main className='bg-linear-to-t from-red-500 to-amber-200 min-h-dvh w-full p-4 grid place-items-center sm:p-8 '>
             <form className='p-6 bg-white rounded-2xl w-full max-w-md gap-10 grid place-items-center shadow-[12px_15px_10px_-5px_rgba(0,0,0,0.15)]' onSubmit={handleSubmit(onSubmit)}>
                 <h1 className='font-extrabold text-2xl mb-4 text-center text-primary-red'>LOGIN</h1>
                 <Field>
