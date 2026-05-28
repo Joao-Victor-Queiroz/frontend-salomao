@@ -37,7 +37,7 @@ export function CrismandoForm({ type, initialValues}: Props) {
         
         if(!resultRegister.success){
          toast.error('Erro ao cadastrar crismando.')
-         return console.log('Erro ao cadastrar crismando')
+         return;
         }
   
         toast.success('Crismando cadastrado com sucesso!')
