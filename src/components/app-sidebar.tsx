@@ -29,6 +29,11 @@ const items = [
     title: "Crismandos",
     url: "/dashboard/crismandos",
     icon: Users,
+  },
+  {
+    title: 'Grupos',
+    url: '/dashboard/grupos',
+    icon: Users,
   }
 ]
 
