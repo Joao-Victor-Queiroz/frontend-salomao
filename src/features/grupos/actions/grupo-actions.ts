@@ -29,7 +29,7 @@ export async function createGrupo(data: CreateGrupoData){
         const api = await apiAxios()
 
         const response = await api.post('grupo/criar-grupo', data)
-
+        console.log("Resposta: ", response)
         revalidatePath('/dashboard/grupos')
 
         return {success: true, data: response.data, message: 'Grupo criado com sucesso!'}
@@ -41,7 +41,7 @@ export async function createGrupo(data: CreateGrupoData){
         } else if (error instanceof Error) {
             errorMessage = error.message;
         }
-
+        console.log('Mensagem de erro: ', errorMessage)
         return { success: false, message: errorMessage}
     }
 }
