@@ -71,11 +71,20 @@ export function ListaCrismandos({crismandos} : Props) {
             <CrismandosFiltros
                 gruposOptions={gruposOptions}
                 gruposSelected={gruposFilter}
-                setGruposSelected={setGruposFilter}
+                setGruposSelected={(val) => {
+                    setGruposFilter(val);
+                    setVisibleCount(8);
+                }}
                 batizadoSelected={batizadoFilter}
-                setBatizadoSelected={setBatizadoFilter}
+                setBatizadoSelected={(val) => {
+                    setBatizadoFilter(val);
+                    setVisibleCount(8);
+                }}
                 eucaristiaSelected={eucaristiaFilter}
-                setEucaristiaSelected={setEucaristiaFilter}
+                setEucaristiaSelected={(val) => {
+                    setEucaristiaFilter(val);
+                    setVisibleCount(8);
+                }}
             />
             </div>
             {(searchName || gruposFilter.length > 0 || batizadoFilter || eucaristiaFilter) ? (

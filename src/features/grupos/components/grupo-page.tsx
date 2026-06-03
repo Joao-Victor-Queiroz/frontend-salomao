@@ -1,6 +1,12 @@
+'use client'
 import { SectionTitle } from "@/components/section-title";
 import { Grupo } from "../types";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
+import { Dialog, DialogClose, DialogContent, DialogTrigger,DialogTitle, DialogHeader, DialogFooter } from "@/components/ui/dialog";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useState, useEffect } from "react";
+import { apiAxios } from "@/lib/api";
+import { Crismando } from "@/features/crismandos";
 
 type Props = {
     grupo: Grupo;
@@ -34,5 +40,70 @@ export function GrupoPageDetails({ grupo } : Props){
                 </div>
             </div>
         </div>
+    )
+}
+
+type DialogProps = {
+    grupoId: string;
+    crismandos: string[];
+}
+
+export function AddCrismandosDialog({ grupoId, crismandos} : DialogProps) {
+    const [open, setOpen] = useState(false);
+    const [crismandosSelecionados, setCrismandosSelecionados] = useState<string[]>([]);
+    const [crismandosData, setCrismandosData] = useState<Crismando[]>([]);
+
+    useEffect(() => {
+       if(!open) {
+        setCrismandosSelecionados([]);
+        return;
+       }
+
+       async function fetchCrismandosLivres(){
+        try {
+            const api = apiAxios();
+
+            const response = (await api).get(`/crismando/crismandos-sem-grupo`)
+            setCrismandosData((await response).data)
+        } catch (error) {
+            
+        }
+       }
+
+       fetchCrismandosLivres();
+    }, [open])
+
+    return (
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger>
+                Adicionar crismandos
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Adicionar crismandos ao grupo</DialogTitle>
+                </DialogHeader>
+                <div>
+                    {crismandosData.map((crismando) => (
+                        <div key={crismando.id}>
+                            <Checkbox
+                            id={crismando.id}
+                            checked={crismandosSelecionados.includes(crismando.id)}
+                            onCheckedChange={(checked) => {
+                                setCrismandosSelecionados(prev => 
+                                    checked ? [...prev, crismando.id] : prev.filter(id => id !== crismando.id)
+                                )
+                            }}
+                            />
+                            <label htmlFor={crismando.id}>{crismando.nomeCrismando}</label>
+                        </div>
+                    ))}
+                </div>
+                <DialogFooter>
+                    <DialogClose>
+                        Fechar
+                    </DialogClose>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     )
 }
