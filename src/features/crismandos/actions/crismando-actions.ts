@@ -15,6 +15,14 @@ export async function getCrismandos(){
     return response.data as CrismandoComGrupo[];
 }
 
+export async function getCrismandosSemGrupo(){
+    const api = await apiAxios();
+
+    const response = await api.get('/crismando/crismandos-sem-grupo')
+
+    return response.data as CrismandoComGrupo[];
+}
+
 
 export async function getCrismandoById(id: string){
     const api = await apiAxios();

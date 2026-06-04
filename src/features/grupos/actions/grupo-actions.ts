@@ -45,3 +45,26 @@ export async function createGrupo(data: CreateGrupoData){
         return { success: false, message: errorMessage}
     }
 }
+
+export async function addCrismandosAoGrupo(grupoId: string, crismandosIds: string[]){
+    try{
+        const api = await apiAxios()
+
+        const response = await api.patch(`/grupo/adicionar-crismandos/${grupoId}`, {crismandosIds})
+
+        revalidatePath(`/dashboard/grupos/${grupoId}`)
+        revalidatePath('/dashboard/crismandos')
+
+        return {success: true, data: response.data, message: 'Crismandos adicionados ao grupo com sucesso!'}
+    }catch(error: unknown){
+        let errorMessage = 'Erro desconhecido';
+
+        if (isAxiosError(error)) {
+            errorMessage = error.response?.data?.message || errorMessage;
+        } else if (error instanceof Error) {
+            errorMessage = error.message;
+        }
+        console.log('Mensagem de erro: ', errorMessage)
+        return { success: false, message: errorMessage}
+    }
+}
