@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Phone, User, ShieldCheck } from "lucide-react"; // Opcional: ícones trazem muita vida ao painel
 
+
 type Props = {
     crismando: Crismando;
 }

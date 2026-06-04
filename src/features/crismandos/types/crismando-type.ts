@@ -22,3 +22,21 @@ id: string;
   primeiraEucaristia: 'Sim' | 'Não';
   justificativa: string;
 };
+
+export type CrismandoComFrequenciaECaixinha = Crismando & {
+  frequencias: Frequencia[];
+};
+
+enum StatusFrequencia {
+  P = 'P',
+  FNJ = 'FNJ',
+  FJ = 'FJ',
+}
+
+type Frequencia = {
+  id: string;
+  crismandoId: string;
+  status: StatusFrequencia;
+  justificativa?: string;
+  dataFrequencia: string;
+}

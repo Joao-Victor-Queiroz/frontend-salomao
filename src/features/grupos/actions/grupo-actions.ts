@@ -46,11 +46,11 @@ export async function createGrupo(data: CreateGrupoData){
     }
 }
 
-export async function addCrismandosAoGrupo(grupoId: string, crismandosIds: string[]){
+export async function addCrismandosAoGrupo(grupoId: string, crismandos: string[]){
     try{
         const api = await apiAxios()
 
-        const response = await api.patch(`/grupo/adicionar-crismandos/${grupoId}`, {crismandosIds})
+        const response = await api.patch(`/grupo/adicionar-crismandos/${grupoId}`, {crismandos})
 
         revalidatePath(`/dashboard/grupos/${grupoId}`)
         revalidatePath('/dashboard/crismandos')

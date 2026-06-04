@@ -15,6 +15,9 @@ import * as z from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from "sonner";
+import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 type Props = {
     grupo: Grupo;
@@ -29,23 +32,34 @@ export function GrupoPageDetails({ grupo } : Props){
             </div>
             <div>
                 <h3 className='font-bold mt-8 text-2xl'>Crismandos</h3>
-                <div className='grid grid-cols-2 mt-4 md:grid-cols-4'>
+                <div className='grid grid-cols-2 mt-4 gap-4 md:grid-cols-4'>
                     {grupo.crismandos?.length === 0 && <p>Nenhum crismando no grupo.</p>}
 
-                    {grupo.crismandos?.map((crismando) => (
+                    {grupo.crismandos?.map((crismando) => {
+                        const numeroFaltas = crismando.frequencias.filter(frequencia => frequencia.status !== 'P').length;
+                    return (
                         <Card key={crismando.id}>
                             <CardHeader>
                                 <CardTitle>{crismando.nomeCrismando}</CardTitle>
+                                {numeroFaltas < 4 ?(
+                                    <Badge className="bg-green-500">{numeroFaltas} faltas</Badge>
+                                ): numeroFaltas < 6 ? (
+                                    <Badge className="bg-yellow-500">{numeroFaltas} faltas</Badge>
+                                ) : (
+                                    <Badge className="bg-red-500">{numeroFaltas} faltas</Badge>
+                                )}
                             </CardHeader>
                             <CardContent>
                                 <p>{crismando.idade} anos</p>
+                                <p>Batizado: {crismando.batizado}</p>
+                                <p>Eucaristia: {crismando.primeiraEucaristia}</p>
                             </CardContent>
+                            <CardFooter>
+                                <Link href={`/dashboard/crismandos/${crismando.id}`} className={buttonVariants()}>Ver detalhes</Link>
+                            </CardFooter>
                         </Card>
-                        // <div className="p-4 border rounded border-gray-400" key={crismando.id}>
-                        //     <p className='font-bold'>{crismando.nomeCrismando}</p>
-                        //     <p>{crismando.idade}</p>
-                        // </div>
-                    ))}
+                    )})}
+
                 </div>
             </div>
         </div>
@@ -109,7 +123,7 @@ export function AddCrismandosDialog({ grupoId} : DialogProps) {
         const result = await addCrismandosAoGrupo(grupoId, data.crismandosIds);
 
         if(!result.success){
-            toast.error('Erro ao adicionar crismandos.')
+            toast.error(`${result.message}`)
             return;
         }
 
