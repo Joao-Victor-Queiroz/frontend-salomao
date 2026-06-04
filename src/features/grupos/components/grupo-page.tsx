@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Loader2 } from "lucide-react";
 
 type Props = {
     grupo: Grupo;
@@ -80,7 +81,8 @@ export function AddCrismandosDialog({ grupoId} : DialogProps) {
     const [open, setOpen] = useState(false);
     const [crismandosSelecionados, setCrismandosSelecionados] = useState<string[]>([]);
     const [crismandosData, setCrismandosData] = useState<Crismando[]>([]);
-    const {handleSubmit, setValue, clearErrors,formState: {errors}} = useForm<CrismandoAoGrupoSchemaType>({
+    const [isLoadingData, setIsLoadingData] = useState(false)
+    const {handleSubmit, setValue, clearErrors,formState: {errors, isSubmitting}} = useForm<CrismandoAoGrupoSchemaType>({
         resolver: zodResolver(addCrismandosAoGrupoSchema),
         defaultValues: {
             crismandosIds: [],
@@ -104,11 +106,15 @@ export function AddCrismandosDialog({ grupoId} : DialogProps) {
 
        async function fetchCrismandosLivres(){
         try {
+            setIsLoadingData(true)
             const response = await getCrismandosSemGrupo();
             console.log('Dados recebidos', response)
             setCrismandosData(response)
         } catch (error) {
             
+        }
+        finally{
+            setIsLoadingData(false)
         }
        }
 
@@ -135,10 +141,10 @@ export function AddCrismandosDialog({ grupoId} : DialogProps) {
     }
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger>
+            <DialogTrigger className={buttonVariants({variant:'default'})}>
                 Adicionar crismandos
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className='max-h-[90vh] overflow-y-auto'>
                 <DialogHeader>
                     <DialogTitle>Adicionar crismandos ao grupo</DialogTitle>
                 </DialogHeader>
@@ -184,33 +190,49 @@ export function AddCrismandosDialog({ grupoId} : DialogProps) {
     )}
 </div>
                 </div>
-                <ScrollArea className='max-h-[60vh] md:max-h-[45vh]'>
-                    {crismandosData.map((crismando) => (
-                        <div key={crismando.id} className='flex items-center gap-2 p-2 hover:bg-muted/50'>
-                            <Checkbox
-                            id={crismando.id}
-                            checked={crismandosSelecionados.includes(crismando.id)}
-                            onCheckedChange={(checked) => {
-                                setCrismandosSelecionados(prev => 
-                                    checked ? [...prev, crismando.id] : prev.filter(id => id !== crismando.id)
-                                )
-                            }}
-                            />
-                           <div className='flex justify-between w-full'>
-                                <label htmlFor={crismando.id} className="font-semibold">{crismando.nomeCrismando}</label>
-                                <span>{crismando.idade} anos</span>
-                           </div>
-                        </div>
-                    ))}
-                </ScrollArea>
-                <Button onClick={handleSubmit(onSubmit)}>
-                    Adicionar crismandos
+                <ScrollArea className='max-h-[30vh] md:max-h-[45vh] pr-2'>
+    {isLoadingData ? (
+        <div className="flex flex-col items-center justify-center py-8 gap-2 text-muted-foreground">
+            <Loader2 className="h-6 w-6 animate-spin text-primary" />
+            <p className="text-sm">Buscando crismandos disponíveis...</p>
+        </div>
+    ) : crismandosData.length === 0 ? (
+        <div className="text-center py-6 text-sm text-muted-foreground">
+            Nenhum crismando sem grupo encontrado.
+        </div>
+    ) : (
+        crismandosData.map((crismando) => (
+            <div key={crismando.id} className='flex items-center gap-2 p-2 hover:bg-muted/50 rounded-md'>
+                <Checkbox
+                    id={crismando.id}
+                    disabled={isSubmitting}
+                    checked={crismandosSelecionados.includes(crismando.id)}
+                    onCheckedChange={(checked) => {
+                        setCrismandosSelecionados(prev => 
+                            checked ? [...prev, crismando.id] : prev.filter(id => id !== crismando.id)
+                        )
+                    }}
+                />
+                <div className='flex justify-between w-full select-none'>
+                    <label htmlFor={crismando.id} className="font-semibold cursor-pointer text-sm">
+                        {crismando.nomeCrismando}
+                    </label>
+                    <span className="text-sm text-muted-foreground">{crismando.idade} anos</span>
+                </div>
+            </div>
+        ))
+    )}
+</ScrollArea>
+                <Button onClick={handleSubmit(onSubmit)} disabled={isSubmitting || isLoadingData}>
+                   {isSubmitting ? (
+                        <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Salvando...
+                        </>
+                    ) : (
+                        'Adicionar crismandos'
+                    )}
                 </Button>
-                <DialogFooter>
-                    <DialogClose>
-                        Fechar
-                    </DialogClose>
-                </DialogFooter>
             </DialogContent>
         </Dialog>
     )
