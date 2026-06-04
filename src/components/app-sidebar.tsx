@@ -58,7 +58,7 @@ export function AppSidebar() {
               render={
                 <Link href={item.url} >
                   <item.icon className={isCurrentActive ? "font-bold text-primary-red" : ""}/>
-                  <span className={isCurrentActive ? "font-bold text-primary-red" : ""}>{item.title}</span>
+                  <span className={isCurrentActive ? "font-bold text-primary-red text-lg" : "text-lg"}>{item.title}</span>
                 </Link>
               }
               />
