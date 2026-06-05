@@ -70,11 +70,13 @@ export async function addCrismandosAoGrupo(grupoId: string, crismandos: string[]
     }
 }
 
-export async function registrarFrequencia(data: FrequenciaPost){
+export async function registrarFrequencia(data: FrequenciaPost, idGrupo: string){
     try {
         const api = await apiAxios()
 
         const response = await api.post('/frequencia/registrar-frequencia', data)
+
+        revalidatePath(`/dashboard/grupos/${idGrupo}`)
 
         return {success: true, message: 'Frequência registrada com sucesso!'}
     } catch (error: unknown) {

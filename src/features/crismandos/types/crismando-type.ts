@@ -27,11 +27,7 @@ export type CrismandoComFrequenciaECaixinha = Crismando & {
   frequencias: Frequencia[];
 };
 
-export enum StatusFrequencia {
-  P = 'P',
-  FNJ = 'FNJ',
-  FJ = 'FJ',
-}
+export type StatusFrequencia = 'P' | 'FNJ' | 'FJ'
 
 export type Frequencia = {
   id: string;
