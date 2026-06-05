@@ -43,11 +43,11 @@ export function GrupoPageDetails({ grupo } : Props){
                             <CardHeader>
                                 <CardTitle>{crismando.nomeCrismando}</CardTitle>
                                 {numeroFaltas < 4 ?(
-                                    <Badge className="bg-green-500">{numeroFaltas} faltas</Badge>
+                                    <Badge className="bg-green-500">{numeroFaltas} falta(s)</Badge>
                                 ): numeroFaltas < 6 ? (
-                                    <Badge className="bg-yellow-500">{numeroFaltas} faltas</Badge>
+                                    <Badge className="bg-yellow-500">{numeroFaltas} falta(s)</Badge>
                                 ) : (
-                                    <Badge className="bg-red-500">{numeroFaltas} faltas</Badge>
+                                    <Badge className="bg-red-500">{numeroFaltas} falta(s)</Badge>
                                 )}
                             </CardHeader>
                             <CardContent>

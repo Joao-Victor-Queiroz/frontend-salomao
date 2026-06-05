@@ -27,16 +27,23 @@ export type CrismandoComFrequenciaECaixinha = Crismando & {
   frequencias: Frequencia[];
 };
 
-enum StatusFrequencia {
+export enum StatusFrequencia {
   P = 'P',
   FNJ = 'FNJ',
   FJ = 'FJ',
 }
 
-type Frequencia = {
+export type Frequencia = {
   id: string;
   crismandoId: string;
   status: StatusFrequencia;
   justificativa?: string;
   dataFrequencia: string;
+}
+
+type FrequenciaSemId = Omit<Frequencia, 'id' | 'dataFrequencia'>
+
+export type FrequenciaPost = { 
+  dataFrequencia: string;
+  frequencias: FrequenciaSemId[];
 }

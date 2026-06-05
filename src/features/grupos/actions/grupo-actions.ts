@@ -4,6 +4,7 @@ import { apiAxios } from "@/lib/api"
 import { Grupo } from "../types/grupo-type"
 import { revalidatePath } from "next/cache"
 import { isAxiosError } from 'axios';
+import { FrequenciaPost } from "@/features/crismandos";
 
 
 type CreateGrupoData = Omit<Grupo, 'id' | 'crismandos' | 'animadores'>
@@ -57,6 +58,26 @@ export async function addCrismandosAoGrupo(grupoId: string, crismandos: string[]
 
         return {success: true, data: response.data, message: 'Crismandos adicionados ao grupo com sucesso!'}
     }catch(error: unknown){
+        let errorMessage = 'Erro desconhecido';
+
+        if (isAxiosError(error)) {
+            errorMessage = error.response?.data?.message || errorMessage;
+        } else if (error instanceof Error) {
+            errorMessage = error.message;
+        }
+        console.log('Mensagem de erro: ', errorMessage)
+        return { success: false, message: errorMessage}
+    }
+}
+
+export async function registrarFrequencia(data: FrequenciaPost){
+    try {
+        const api = await apiAxios()
+
+        const response = await api.post('/frequencia/registrar-frequencia', data)
+
+        return {success: true, message: 'Frequência registrada com sucesso!'}
+    } catch (error: unknown) {
         let errorMessage = 'Erro desconhecido';
 
         if (isAxiosError(error)) {
