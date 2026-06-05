@@ -5,6 +5,7 @@ import { Grupo } from "../types/grupo-type"
 import { revalidatePath } from "next/cache"
 import { isAxiosError } from 'axios';
 import { FrequenciaPost } from "@/features/crismandos";
+import { FrequenciaSchemaType } from "../schemas/frequencia-schema";
 
 
 type CreateGrupoData = Omit<Grupo, 'id' | 'crismandos' | 'animadores'>
@@ -70,7 +71,7 @@ export async function addCrismandosAoGrupo(grupoId: string, crismandos: string[]
     }
 }
 
-export async function registrarFrequencia(data: FrequenciaPost, idGrupo: string){
+export async function registrarFrequencia(data: FrequenciaSchemaType, idGrupo: string){
     try {
         const api = await apiAxios()
 

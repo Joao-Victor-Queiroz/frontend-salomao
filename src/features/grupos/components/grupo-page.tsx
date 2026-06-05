@@ -30,6 +30,7 @@ export function GrupoPageDetails({ grupo } : Props){
             <div>
                 <SectionTitle title={grupo.nomeGrupo}/>
                 <AddCrismandosDialog grupoId={grupo.id}/>
+                <Link href={`/dashboard/grupos/${grupo.id}/frequencia`} className={buttonVariants()}>Registrar Frequência</Link>
             </div>
             <div>
                 <h3 className='font-bold mt-8 text-2xl'>Crismandos</h3>
