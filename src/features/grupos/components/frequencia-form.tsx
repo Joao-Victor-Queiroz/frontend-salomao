@@ -1,7 +1,7 @@
 'use client'
 import {useForm, useFieldArray} from 'react-hook-form';
 import { frequenciaSchema, FrequenciaSchemaType } from '../schemas/frequencia-schema';
-import { Crismando, FrequenciaPost, StatusFrequencia} from '@/features/crismandos';
+import { Crismando, StatusFrequencia} from '@/features/crismandos';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { registrarFrequencia } from '../actions';
@@ -9,6 +9,8 @@ import { Field, FieldLabel } from '@/components/ui/field';
 import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { CrismandoFrequenciaItem } from './crismando-frequencia-item';
+import { Button } from '@/components/ui/button';
+import { Loader2 } from 'lucide-react';
 
 type Props = {
     crismandos: Crismando[];
@@ -22,7 +24,7 @@ export function FrequenciaForm({crismandos, idGrupo} : Props) {
         justificativa: ''
     }))
 
-    const { control, handleSubmit, register, setValue, watch, formState: {errors, isSubmitting}} = useForm<FrequenciaSchemaType>({
+    const { control, handleSubmit, register, setValue, watch, formState: {errors, isSubmitting, isLoading}} = useForm<FrequenciaSchemaType>({
         resolver: zodResolver(frequenciaSchema),
         defaultValues: {
             dataFrequencia: '',
@@ -55,7 +57,7 @@ export function FrequenciaForm({crismandos, idGrupo} : Props) {
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} >
+        <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-6 w-full' >
            <Field>
             <FieldLabel>Data da Frequência</FieldLabel>
             <Input 
@@ -65,7 +67,7 @@ export function FrequenciaForm({crismandos, idGrupo} : Props) {
             />
            </Field>
 
-           <div>
+           <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'>
                 {fields.map((field, index) => {
                   const crismando = crismandos.find((c) => c.id === field.crismandoId)
 
@@ -78,6 +80,9 @@ export function FrequenciaForm({crismandos, idGrupo} : Props) {
                   )
                 })}
            </div>
+           <Button type='submit' disabled={isSubmitting || isLoading}>
+                {isSubmitting ? <Loader2 /> : isLoading ? <Loader2 /> : 'Registrar Frequência'}
+           </Button>
         </form>
     )
 

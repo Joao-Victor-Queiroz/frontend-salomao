@@ -16,13 +16,13 @@ type Props = {
 export  function CrismandoFrequenciaItem({crismando, currentStatus, setStatus, index, register, errors}: Props){
     const options = [
         {label: 'Presente', value: 'P'},
+        {label: 'Falta Não Justificada', value: 'FNJ'},
         {label: 'Falta Justificada', value: 'FJ'},
-        {label: 'Falta Não Justificada', value: 'FNJ'}
     ]
     return (
-       <div>
-            <h1>{crismando.nomeCrismando}</h1>
-            <div>
+       <div className='flex flex-col gap-4 p-4 rounded-md border-2  shadow-lg'>
+            <h1 className='font-bold text-center'>{crismando.nomeCrismando}</h1>
+            <div className='flex flex-col gap-2'>
                 <input type="hidden" {...register(`frequencias.${index}.crismandoId`)} />
                 <input type="hidden" {...register(`frequencias.${index}.status`)} />
                 {options.map((option) => (
@@ -35,6 +35,7 @@ export  function CrismandoFrequenciaItem({crismando, currentStatus, setStatus, i
                         <FieldLabel>Justificativa</FieldLabel>
                         <Input 
                             type='text'
+                            placeholder="Ex: Estava doente"
                             error={errors?.frequencias?.[index]?.justificativa?.message}
                             {...register(`frequencias.${index}.justificativa`)}
                         />
