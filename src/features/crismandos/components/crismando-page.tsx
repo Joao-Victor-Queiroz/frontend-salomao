@@ -6,7 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Phone, User, ShieldCheck, AlertCircle, FileText } from "lucide-react";
 
-// Definição da estrutura de frequência localmente ou estendida no seu tipo Crismando
 type Frequencia = {
     id: string;
     crismandoId: string;
@@ -16,13 +15,12 @@ type Frequencia = {
 }
 
 type Props = {
-    crismando: Crismando & { frequencias?: Frequencia[] }; // Permite receber a lista de frequências
+    crismando: Crismando & { frequencias?: Frequencia[] };
 }
 
 export function CrismandoPageDetails({ crismando }: Props) {
     console.log('Crismando:', crismando);
 
-    // Filtra apenas os registros que são faltas (Justificadas ou Não Justificadas)
     const faltas = crismando.frequencias?.filter(f => f.status === 'FJ' || f.status === 'FNJ') || [];
 
     return (
@@ -108,7 +106,6 @@ export function CrismandoPageDetails({ crismando }: Props) {
                     </CardContent>
                 </Card>
 
-                {/* SEÇÃO DE FALTAS */}
                 <Card className="md:col-span-2">
                     <CardHeader className="flex flex-row items-center justify-between pb-2">
                         <div className="flex items-center space-x-2">
@@ -129,13 +126,13 @@ export function CrismandoPageDetails({ crismando }: Props) {
                                 {faltas.map((falta) => (
                                     <div 
                                         key={falta.id} 
-                                        className={`p-3 rounded-lg border text-sm flex flex-col gap-2 transition-colors ${
+                                        className={`p-3 rounded-lg border-y border-r border-l-4 text-sm flex flex-col gap-2 transition-colors ${
                                             falta.status === 'FNJ' 
-                                                ? 'bg-destructive/5 border-destructive/20' 
-                                                : 'bg-muted/40 border-muted'
+                                                ? 'bg-destructive/5 border-y-destructive/20 border-r-destructive/20 border-l-destructive' 
+                                                : 'bg-muted/40 border-muted border-l-muted-foreground/60'
                                         }`}
                                     >
-                                        <div className="flex items-center justify-between w-full">
+                                        <div className="flex flex-col sm:flex-row sm:items-center justify-between items-start gap-2 w-full">
                                             <div className="flex items-center gap-2 text-muted-foreground">
                                                 <Calendar className="h-4 w-4 shrink-0" />
                                                 <span className="font-medium text-foreground">
@@ -144,7 +141,7 @@ export function CrismandoPageDetails({ crismando }: Props) {
                                             </div>
                                             <Badge 
                                                 variant={falta.status === 'FNJ' ? 'destructive' : 'outline'}
-                                                className="text-xs font-semibold uppercase tracking-wider"
+                                                className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider whitespace-nowrap"
                                             >
                                                 {falta.status === 'FNJ' ? 'Não Justificada' : 'Justificada'}
                                             </Badge>
@@ -153,7 +150,7 @@ export function CrismandoPageDetails({ crismando }: Props) {
                                         {falta.status === 'FJ' && (
                                             <div className="mt-1 bg-background/80 p-2.5 rounded border border-dashed text-xs text-muted-foreground flex gap-1.5 items-start">
                                                 <FileText className="h-3.5 w-3.5 mt-0.5 shrink-0 text-amber-500" />
-                                                <div>
+                                                <div className="break-words w-full">
                                                     <span className="font-semibold text-foreground block mb-0.5">Motivo/Justificativa:</span>
                                                     {falta.justificativa?.trim() ? falta.justificativa : "Sem justificativa detalhada por escrito."}
                                                 </div>
