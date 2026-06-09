@@ -10,7 +10,8 @@ import { Crismando } from "@/features/crismandos";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { getCrismandosSemGrupo } from "@/features/crismandos";
 import { Button } from "@/components/ui/button";
-import { addCrismandosAoGrupo } from "../actions";
+import { addCrismandosAoGrupo, removeCrismandoDoGrupo } from "../actions";
+import { cn } from "@/lib/utils";
 import * as z from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -18,13 +19,34 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Loader2 } from "lucide-react";
+import { Loader2, Trash } from "lucide-react";
+import { ConfirmarAcaoDialog } from "@/components/confirmar-acao-dialog";
 
 type Props = {
     grupo: Grupo;
 }
 
 export function GrupoPageDetails({ grupo } : Props){
+    const [openDialog, setOpenDialog] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [crismandoSelecionadoId, setCrismandoSelecionadoId] = useState<string | null>(null);
+
+    const handleRemoverCrismando = async({grupoId, crismandoId}: {grupoId: string, crismandoId: string}) => {
+        setIsLoading(true)
+
+        const response = await removeCrismandoDoGrupo(grupoId, crismandoId);
+
+        setIsLoading(false);
+        setOpenDialog(false);
+
+        if(!response.success){
+            toast.error(`${response.message}`)
+            return;
+        }
+
+        toast.success(`${response.message}`)
+
+    }
     return(
         <div>
             <div>
@@ -34,7 +56,7 @@ export function GrupoPageDetails({ grupo } : Props){
             </div>
             <div>
                 <h3 className='font-bold mt-8 text-2xl'>Crismandos</h3>
-                <div className='grid grid-cols-2 mt-4 gap-4 md:grid-cols-4'>
+                <div className='grid grid-cols-2 mt-4 gap-4 md:grid-cols-3 lg:grid-cols-4'>
                     {grupo.crismandos?.length === 0 && <p>Nenhum crismando no grupo.</p>}
 
                     {grupo.crismandos?.map((crismando) => {
@@ -56,14 +78,35 @@ export function GrupoPageDetails({ grupo } : Props){
                                 <p>Batizado: {crismando.batizado}</p>
                                 <p>Eucaristia: {crismando.primeiraEucaristia}</p>
                             </CardContent>
-                            <CardFooter>
-                                <Link href={`/dashboard/crismandos/${crismando.id}`} className={buttonVariants()}>Ver detalhes</Link>
+                            <CardFooter className='flex flex-col gap-2 justify-between lg:flex-row'>
+                                <Link href={`/dashboard/crismandos/${crismando.id}`} className={cn(buttonVariants(), 'w-full lg:w-auto')}>Ver detalhes</Link>
+                                <Button
+                                    variant="destructive"
+                                    onClick={() => {
+                                        setCrismandoSelecionadoId(crismando.id);
+                                        setOpenDialog(true);
+                                    }}
+                                    className='w-full lg:w-auto'
+                                >  
+                                    <Trash />
+                                </Button>
                             </CardFooter>
                         </Card>
                     )})}
 
                 </div>
             </div>
+            <ConfirmarAcaoDialog
+                open={openDialog}
+                onClose={() => setOpenDialog(false)}
+                isLoading={isLoading}
+                titulo="Remover crismando do grupo"
+                descricao="Tem certeza que deseja remover este crismando do grupo? Ele não será excluído do sistema."
+                onConfirmar={() => {
+                    if (!crismandoSelecionadoId) return;
+                    handleRemoverCrismando({ grupoId: grupo.id, crismandoId: crismandoSelecionadoId });
+                }}
+            />
         </div>
     )
 }

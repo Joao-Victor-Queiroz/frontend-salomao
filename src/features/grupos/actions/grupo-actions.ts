@@ -91,3 +91,26 @@ export async function registrarFrequencia(data: FrequenciaSchemaType, idGrupo: s
         return { success: false, message: errorMessage}
     }
 }
+
+export async function removeCrismandoDoGrupo(grupoId: string, crismandoId: string){
+    try {
+        const api = await apiAxios()
+
+        await api.patch(`/grupo/remover-crismando/${grupoId}/${crismandoId}`)
+
+        revalidatePath(`/dashboard/grupos/${grupoId}`)
+        revalidatePath('/dashboard/crismandos')
+
+        return {success: true, message: 'Crismando removido do grupo com sucesso!'}
+    } catch (error: unknown) {
+        let errorMessage = 'Erro desconhecido';
+
+        if (isAxiosError(error)) {
+            errorMessage = error.response?.data?.message || errorMessage;
+        } else if (error instanceof Error) {
+            errorMessage = error.message;
+        }
+        console.log('Mensagem de erro: ', errorMessage)
+        return { success: false, message: errorMessage}
+    }
+}
