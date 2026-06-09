@@ -24,7 +24,7 @@ export function FrequenciaForm({crismandos, idGrupo} : Props) {
         justificativa: ''
     }))
 
-    const { control, handleSubmit, register, setValue, watch, formState: {errors, isSubmitting, isLoading}} = useForm<FrequenciaSchemaType>({
+    const { control, handleSubmit, register, setValue, formState: {errors, isSubmitting, isLoading}} = useForm<FrequenciaSchemaType>({
         resolver: zodResolver(frequenciaSchema),
         defaultValues: {
             dataFrequencia: '',
@@ -72,15 +72,9 @@ export function FrequenciaForm({crismandos, idGrupo} : Props) {
                   const crismando = crismandos.find((c) => c.id === field.crismandoId)
 
                   if(!crismando) return null;
-
-                  const currentStatus = useWatch({
-                    control: control,
-                    name: `frequencias.${index}.status`,
-                    defaultValue: 'P',
-                  })
-
+        
                   return (
-                    <CrismandoFrequenciaItem crismando={crismando} currentStatus={currentStatus} key={field.id} index={index} setStatus={(status) => setValue(`frequencias.${index}.status`, status)} register={register} errors={errors}/>
+                    <CrismandoFrequenciaItem crismando={crismando} control={control} key={field.id} index={index} setStatus={(status) => setValue(`frequencias.${index}.status`, status)} register={register} errors={errors}/>
                   )
                 })}
            </div>
