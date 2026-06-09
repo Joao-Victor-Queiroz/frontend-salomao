@@ -1,5 +1,5 @@
 'use client'
-import {useForm, useFieldArray} from 'react-hook-form';
+import {useForm, useFieldArray, useWatch} from 'react-hook-form';
 import { frequenciaSchema, FrequenciaSchemaType } from '../schemas/frequencia-schema';
 import { Crismando, StatusFrequencia} from '@/features/crismandos';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -73,7 +73,11 @@ export function FrequenciaForm({crismandos, idGrupo} : Props) {
 
                   if(!crismando) return null;
 
-                  const currentStatus = watch(`frequencias.${index}.status`)
+                  const currentStatus = useWatch({
+                    control: control,
+                    name: `frequencias.${index}.status`,
+                    defaultValue: 'P',
+                  })
 
                   return (
                     <CrismandoFrequenciaItem crismando={crismando} currentStatus={currentStatus} key={field.id} index={index} setStatus={(status) => setValue(`frequencias.${index}.status`, status)} register={register} errors={errors}/>

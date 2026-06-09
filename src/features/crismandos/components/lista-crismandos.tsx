@@ -6,9 +6,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
-import { UserPlus, Search, SlidersHorizontal} from 'lucide-react';
+import { UserPlus, Search} from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { primeiroEUltimoNome } from '../utils';
 import { CrismandosFiltros } from './crismandos-filtros';
 
 export type CrismandoComGrupo = Crismando & {

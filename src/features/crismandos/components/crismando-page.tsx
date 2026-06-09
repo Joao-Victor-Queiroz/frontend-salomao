@@ -81,8 +81,6 @@ export function CrismandoPageDetails({ crismando }: Props) {
                         </div>
                     </CardContent>
                 </Card>
-
-                {/* Filiação */}
                 <Card className="md:col-span-2">
                     <CardHeader>
                         <CardTitle className="text-lg font-medium">Filiação</CardTitle>
@@ -150,7 +148,7 @@ export function CrismandoPageDetails({ crismando }: Props) {
                                         {falta.status === 'FJ' && (
                                             <div className="mt-1 bg-background/80 p-2.5 rounded border border-dashed text-xs text-muted-foreground flex gap-1.5 items-start">
                                                 <FileText className="h-3.5 w-3.5 mt-0.5 shrink-0 text-amber-500" />
-                                                <div className="break-words w-full">
+                                                <div className="wrap-break-word w-full">
                                                     <span className="font-semibold text-foreground block mb-0.5">Motivo/Justificativa:</span>
                                                     {falta.justificativa?.trim() ? falta.justificativa : "Sem justificativa detalhada por escrito."}
                                                 </div>

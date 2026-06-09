@@ -2,7 +2,7 @@
 import { SectionTitle } from "@/components/section-title";
 import { Grupo } from "../types";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
-import { Dialog, DialogClose, DialogContent, DialogTrigger,DialogTitle, DialogHeader, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger,DialogTitle, DialogHeader, DialogFooter } from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -97,7 +97,7 @@ export function AddCrismandosDialog({ grupoId} : DialogProps) {
         if (crismandosSelecionados.length > 0) {
             clearErrors("crismandosIds");
         }
-    }, [crismandosSelecionados, open, setValue])
+    }, [crismandosSelecionados, open, setValue, clearErrors])
 
     useEffect(() => {
        if(!open) {

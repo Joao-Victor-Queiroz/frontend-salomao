@@ -4,7 +4,6 @@ import { apiAxios } from "@/lib/api"
 import { Grupo } from "../types/grupo-type"
 import { revalidatePath } from "next/cache"
 import { isAxiosError } from 'axios';
-import { FrequenciaPost } from "@/features/crismandos";
 import { FrequenciaSchemaType } from "../schemas/frequencia-schema";
 
 
@@ -75,7 +74,7 @@ export async function registrarFrequencia(data: FrequenciaSchemaType, idGrupo: s
     try {
         const api = await apiAxios()
 
-        const response = await api.post('/frequencia/registrar-frequencia', data)
+        await api.post('/frequencia/registrar-frequencia', data)
 
         revalidatePath(`/dashboard/grupos/${idGrupo}`)
 

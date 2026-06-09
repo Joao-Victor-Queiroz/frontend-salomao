@@ -2,6 +2,8 @@ import { Crismando, StatusFrequencia } from "@/features/crismandos"
 import { Button } from '@/components/ui/button';
 import { Field, FieldLabel} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { UseFormRegister, FieldErrors } from "react-hook-form";
+import { FrequenciaSchemaType } from "../schemas/frequencia-schema";
 
 
 type Props = {
@@ -9,8 +11,8 @@ type Props = {
     currentStatus: StatusFrequencia;
     setStatus: (status: StatusFrequencia) => void;
     index: number;
-    register: any;
-    errors: any
+    register: UseFormRegister<FrequenciaSchemaType>;
+    errors: FieldErrors<FrequenciaSchemaType>
 }
 
 export  function CrismandoFrequenciaItem({crismando, currentStatus, setStatus, index, register, errors}: Props){

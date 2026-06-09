@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useForm, Controller} from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CrismandoSchemaType, crismandoSchema } from "../schemas";
-import { FileText, User, Phone, Hash, Calendar, Map, MapPin, Home, Heart, BookOpen } from "lucide-react";
+import { User, MapPin, FileText, Heart, BookOpen } from "lucide-react";
 import { SectionTitle } from "@/components/section-title";
 import { IMaskInput } from 'react-imask';
 import { cn } from "@/lib/utils";
