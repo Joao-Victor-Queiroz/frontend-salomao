@@ -4,8 +4,9 @@ import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/componen
 export function CrismandosSkeleton(){
     return(
         <div>
+            <Skeleton className="h-10 w-[40%] rounded-md mb-5" />
             <div className='grid grid-cols-1 w-full lg:grid-cols-3 gap-4'>
-                <Skeleton className="h-8w-full rounded-md" />
+                <Skeleton className="h-8 w-full rounded-md" />
                 <Skeleton className="h-8 w-full rounded-md" />
                 <Skeleton className="h-8 w-full rounded-md" />
             </div>

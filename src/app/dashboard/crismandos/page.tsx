@@ -8,7 +8,6 @@ export default async function CrismandosPage() {
 
     return (
         <div className="space-y-4">
-            <SectionTitle title="Crismandos" />
             <Suspense fallback={<CrismandosSkeleton />}>
                 <CrismandosContainer />
             </Suspense>

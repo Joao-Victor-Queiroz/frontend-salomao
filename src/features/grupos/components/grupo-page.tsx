@@ -64,7 +64,7 @@ export function GrupoPageDetails({ grupo } : Props){
                     return (
                         <Card key={crismando.id}>
                             <CardHeader>
-                                <CardTitle>{crismando.nomeCrismando}</CardTitle>
+                                <CardTitle className='line-clamp-1'>{crismando.nomeCrismando}</CardTitle>
                                 {numeroFaltas < 4 ?(
                                     <Badge className="bg-green-500">{numeroFaltas} falta(s)</Badge>
                                 ): numeroFaltas < 6 ? (
@@ -152,7 +152,6 @@ export function AddCrismandosDialog({ grupoId} : DialogProps) {
         try {
             setIsLoadingData(true)
             const response = await getCrismandosSemGrupo();
-            console.log('Dados recebidos', response)
             setCrismandosData(response)
         } catch (error) {
             
@@ -165,7 +164,7 @@ export function AddCrismandosDialog({ grupoId} : DialogProps) {
        fetchCrismandosLivres();
     }, [open])
 
-    function handleDescarmarTodos(){
+    function handleDesmarcarTodos(){
         setCrismandosSelecionados([]);
     }
 
@@ -192,7 +191,7 @@ export function AddCrismandosDialog({ grupoId} : DialogProps) {
                 <DialogHeader>
                     <DialogTitle>Adicionar crismandos ao grupo</DialogTitle>
                 </DialogHeader>
-                <Button onClick={handleDescarmarTodos} variant={"destructive"} size={"sm"}>
+                <Button onClick={handleDesmarcarTodos} variant={"destructive"} size={"sm"}>
                     Desmarcar todos
                 </Button>
                 <div>

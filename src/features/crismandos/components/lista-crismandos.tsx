@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { UserPlus, Search} from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { CrismandosFiltros } from './crismandos-filtros';
+import { SectionTitle } from '@/components/section-title';
 
 export type CrismandoComGrupo = Crismando & {
     nomeGrupo: string;
@@ -53,6 +54,7 @@ export function ListaCrismandos({crismandos} : Props) {
 
     return (
         <div>
+            <SectionTitle title="Crismandos" />
             <div className='grid grid-cols-1 w-full lg:grid-cols-3 gap-4'>
             <Input 
                 icon={Search}
