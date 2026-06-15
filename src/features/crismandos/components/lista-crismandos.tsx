@@ -100,15 +100,15 @@ export function ListaCrismandos({crismandos} : Props) {
             <div className="mt-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {displayedElements.length > 0 ? (
                     displayedElements.map((crismando) => (
-                        <Card key={crismando.id}>
+                        <Card key={crismando.id} className='hover:shadow-xl hover:-translate-y-1 transition-all duration-300'>
                         <CardHeader>
-                            <CardTitle className='line-clamp-1'>{crismando.nomeCrismando}</CardTitle>
+                            <CardTitle className='line-clamp-1 font-bold'>{crismando.nomeCrismando}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <p>{crismando.idade} anos</p>
                             <p>{crismando.nomeGrupo}</p>
-                            <p>Batismo: {crismando.batizado}</p>
-                            <p>Eucaristia: {crismando.primeiraEucaristia}</p>
+                            <p><span className='font-semibold'>Batismo:</span> {crismando.batizado}</p>
+                            <p><span className='font-semibold'>Eucaristia:</span> {crismando.primeiraEucaristia}</p>
                         </CardContent>
                         <CardFooter>
                             <Link href={`/dashboard/crismandos/${crismando.id}`} className={buttonVariants()}>
