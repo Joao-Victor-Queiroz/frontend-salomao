@@ -176,7 +176,7 @@ export function AddCrismandosDialog({ grupoId} : DialogProps) {
             return;
         }
 
-        toast.success('Crismandos adicionados com sucesso!')
+        toast.success(`${result.message}`)
         setOpen(false);
         setCrismandosSelecionados([]);
         setCrismandosData([]);

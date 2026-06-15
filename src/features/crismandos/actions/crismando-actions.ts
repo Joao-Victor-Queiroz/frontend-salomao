@@ -32,6 +32,27 @@ export async function getCrismandoById(id: string){
     return response.data as CrismandoComGrupo;
 }
 
+export async function apagarCrismando(idCrismando: string){
+   try {
+        const api = await apiAxios();
+
+        await api.delete(`/crismando/remover-crismando/${idCrismando}`)
+
+        revalidatePath('dashboard/crismandos')
+        return {success: true, message: 'Crismando deletado com sucesso.'}
+    } catch (error: unknown) {
+        let errorMessage = 'Erro desconhecido';
+
+        if (isAxiosError(error)) {
+            errorMessage = error.response?.data?.message || errorMessage;
+        } else if (error instanceof Error) {
+            errorMessage = error.message;
+        }
+
+        return { success: false, message: errorMessage}
+   }
+}
+
 export async function registerCrismando(data: CrismandoSchemaType) {
     try {
         const api = await apiAxios();

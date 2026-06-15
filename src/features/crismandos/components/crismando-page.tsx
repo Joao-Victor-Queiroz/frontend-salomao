@@ -1,10 +1,18 @@
+'use client'
 import { SectionTitle } from "@/components/section-title";
 import { Crismando } from "../types";
 import Link from 'next/link';
-import { buttonVariants } from '@/components/ui/button';
+import { buttonVariants, Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Phone, User, ShieldCheck, AlertCircle, FileText } from "lucide-react";
+import { Calendar, Phone, User, ShieldCheck, AlertCircle, FileText, Trash } from "lucide-react";
+import { useAuth } from "@/features/auth";
+import {Cargo} from '@/features/auth/types/enum-cargo'
+import { ConfirmarAcaoDialog } from "@/components/confirmar-acao-dialog";
+import { useState } from "react";
+import { toast } from "sonner";
+import { apagarCrismando } from "../actions";
+import { useRouter } from "next/navigation";
 
 type Frequencia = {
     id: string;
@@ -19,24 +27,53 @@ type Props = {
 }
 
 export function CrismandoPageDetails({ crismando }: Props) {
-    console.log('Crismando:', crismando);
+    const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+    const [isLoadingRemocao, setIsLoadingRemocao] = useState<boolean>(false);
 
     const faltas = crismando.frequencias?.filter(f => f.status === 'FJ' || f.status === 'FNJ') || [];
+    const { user } = useAuth();
+    const doesCargoMatches = user?.cargo === Cargo.COORDENADOR_FREQUENCIA || user?.cargo === Cargo.FORMADOR;
+    const router = useRouter();
+
+    async function handleApagarCrismando(idCrismando: string) {
+        setIsLoadingRemocao(true);
+
+        const response = await apagarCrismando(idCrismando);
+        setIsLoadingRemocao(false);
+        
+        if(!response.success){
+            toast.error(response.message);
+            return;
+        }
+
+        toast.success(response.message);
+        setIsDialogOpen(false);
+        router.push('/dashboard/crismandos')
+    }
 
     return (
         <div className="space-y-6 max-w-4xl mx-auto p-4">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b pb-4">
                 <SectionTitle title={crismando.nomeCrismando} className="text-center sm:text-start"/>
-                <Link 
-                    href={`/dashboard/crismandos/${crismando.id}/edit`} 
-                    className={buttonVariants({ variant: "outline", size: "sm" })}
-                >
-                    Editar crismando
-                </Link>
+                <nav className="flex flex-col gap-4 sm:flex-row">
+                    <Link 
+                        href={`/dashboard/crismandos/${crismando.id}/edit`} 
+                        className={buttonVariants({ variant: "default" })}
+                    >
+                        Editar crismando
+                    </Link>
+                    {
+                        doesCargoMatches && (
+                            <Button className='bg-primary-red' onClick={() => setIsDialogOpen(true)}>
+                                <Trash />
+                                Apagar crismando
+                            </Button>
+                        )
+                    }
+                </nav>
             </div>
 
             <div className="grid gap-6 md:grid-cols-2">
-                {/* Dados Pessoais */}
                 <Card>
                     <CardHeader className="flex flex-row items-center space-x-2 pb-2">
                         <User className="h-5 w-5 text-muted-foreground" />
@@ -60,7 +97,6 @@ export function CrismandoPageDetails({ crismando }: Props) {
                     </CardContent>
                 </Card>
 
-                {/* Sacramentos */}
                 <Card>
                     <CardHeader className="flex flex-row items-center space-x-2 pb-2">
                         <ShieldCheck className="h-5 w-5 text-muted-foreground" />
@@ -161,6 +197,13 @@ export function CrismandoPageDetails({ crismando }: Props) {
                     </CardContent>
                 </Card>
             </div>
+              <ConfirmarAcaoDialog 
+                open={isDialogOpen} 
+                onClose={() => setIsDialogOpen(false)} 
+                onConfirmar={() => handleApagarCrismando(crismando.id)} 
+                titulo="Apagar crismando"
+                descricao="Tem certeza que deseja apagar o crismando? Essa ação não pode ser revertida!"
+            />
         </div>
     );
 }
