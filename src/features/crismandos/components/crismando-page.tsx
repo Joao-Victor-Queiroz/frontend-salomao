@@ -13,6 +13,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { apagarCrismando } from "../actions";
 import { useRouter } from "next/navigation";
+import {CrismandoCaixinhaRegister} from "@/features/crismandos/components/crismando-caixinha-register";
 
 type Frequencia = {
     id: string;
@@ -62,6 +63,7 @@ export function CrismandoPageDetails({ crismando }: Props) {
                     >
                         Editar crismando
                     </Link>
+                    <CrismandoCaixinhaRegister crismandoId={crismando.id} />
                     {
                         doesCargoMatches && (
                             <Button className='bg-primary-red' onClick={() => setIsDialogOpen(true)}>
