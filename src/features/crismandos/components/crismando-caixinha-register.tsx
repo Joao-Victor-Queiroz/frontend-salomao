@@ -24,7 +24,7 @@ export function CrismandoCaixinhaRegister({ crismandoId }: Props) {
         defaultValues: {
             crismandoId: crismandoId,
             valorPago: 0,
-            dataPagamento: new Date().toISOString().split('T')[0] as any
+            dataPagamento: new Date().toISOString().split('T')[0] as string,
         }
     });
 
