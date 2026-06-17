@@ -7,6 +7,7 @@ import { LoginSchemaFormType, loginSchemaForm } from '../schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useAuth } from '../context';
+import { Loader2 } from 'lucide-react';
 
 export function LoginForm() {
     const {register, handleSubmit, formState: { isSubmitting } } = useForm<LoginSchemaFormType>({
@@ -32,7 +33,11 @@ export function LoginForm() {
                     <Input id='password' type='password' placeholder='Digite sua senha...' {...register('password')} />
                 </Field>
                 <Button className='bg-primary-red w-full h-10 mt-4 rounded-b-md' disabled={isSubmitting || isLoading} type='submit'>
-                    Entrar
+                    {isSubmitting ? (
+                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                       <p>Entrar</p> 
+                    )}
                 </Button>
             <Link href='#' className='text-sm font-medium pb-8 hover:underline'>
                 Não possui cadastro? Cadastre-se agora!
