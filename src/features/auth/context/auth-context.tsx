@@ -6,6 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { LoginSchemaFormType } from '../schemas'
 import { useRouter } from 'next/navigation';
 import { getProfile } from "@/features/auth";
+import { usePathname } from 'next/navigation';
 
 type AuthContextType = {
     user: UserLoginType | null;
@@ -23,31 +24,53 @@ export function AuthProvider({ children} : { children: React.ReactNode;}){
     const [user, setUser] = useState<UserLoginType | null>(null);
     const [isResolving, setIsResolving] = useState(true);
     const router = useRouter();
+    const pathName = usePathname();
 
     useEffect(() => {
        async function loadUser(){
         try {
             const isUserSaved = localStorage.getItem("user");
 
-            if(isUserSaved){
-                setUser(JSON.parse(isUserSaved))
-            }
+            if (isUserSaved) {
+                const parsedUser = JSON.parse(isUserSaved);
+                setUser(parsedUser);
 
-            const response = await getProfile();
+                // Se o usuário já está logado e está na página de login, redireciona para o dashboard
+                if (pathName === '/') {
+                    router.replace('/dashboard');
+                    return;
+                }
 
-            if(response.data) {
-                setUser(response.data)
-                localStorage.setItem("user", JSON.stringify(response.data))
+                // Busca informações atualizadas no backend e valida a sessão
+                const response = await getProfile();
+
+                if (response) {
+                    const userData = {
+                        ...response,
+                        nome: response.nomeAnimador || response.nome,
+                    };
+                    setUser(userData);
+                    localStorage.setItem("user", JSON.stringify(userData));
+                }
+            } else {
+                // Se não há usuário logado e não está na página de login, redireciona para a raiz
+                if (pathName !== '/') {
+                    router.replace('/');
+                }
             }
         } catch (error) {
+            console.error("Erro ao validar sessão ou carregar perfil:", error);
             setUser(null);
             localStorage.removeItem("user");
-        }finally {
+            if (pathName !== '/') {
+                router.replace('/');
+            }
+        } finally {
             setIsResolving(false);
         }
        }
        loadUser();
-    }, []);
+    }, [pathName, router]);
 
     console.log("Usuário do contexto: ", user);
  
@@ -56,7 +79,6 @@ export function AuthProvider({ children} : { children: React.ReactNode;}){
         mutationFn: (data: LoginSchemaFormType) => handleLoginAction(data),
         onSuccess: (data) => {
             if (data.success && data.user) {
-                console.log('O onSuccess foi chamado com sucesso:', data);
                 setUser(data.user);
                 localStorage.setItem("user", JSON.stringify(data.user))
                 router.refresh();
