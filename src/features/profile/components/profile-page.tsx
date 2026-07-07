@@ -5,7 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { User } from "lucide-react";
 
 
-const CARGO_LABELS: Record<Cargo, string> = {
+export const CARGO_LABELS: Record<Cargo, string> = {
+  [Cargo.ADMIN]: "Administrador",
   [Cargo.COORDENADOR_GERAL]: "Coordenador Geral",
   [Cargo.FORMADOR]: "Formador",
   [Cargo.COORDENADOR_FREQUENCIA]: "Coordenador de Frequência",
