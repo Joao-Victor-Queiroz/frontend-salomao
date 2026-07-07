@@ -3,10 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Providers  from '../providers';
 import { AuthProvider } from "@/features/auth";
 import "./globals.css";
-// import { cookies } from "next/headers";
-// import { UserType } from "@/features/auth";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner"
+import { ThemeProvider } from "@/components/theme-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,25 +22,6 @@ export const metadata: Metadata = {
   description: "Aplicação de gerenciamento pastoral para facilitar nossa vida",
 };
 
-// async function getMe(): Promise<UserType | null>{
-//   const cookiesStore = await cookies();
-
-//   const token = cookiesStore.get("token")?.value;
-
-//   if(!token) return null;
-
-//   try {
-//     const response = await fetch(`${process.env.BASE_URL}/auth/me`, {
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//       },
-//       method: 'GET',
-//     });
-//     return await response.json();
-//   } catch {
-//     return null;
-//   }
-// }
 
 export default async function RootLayout({
   children,
@@ -51,10 +31,16 @@ export default async function RootLayout({
 
   return (
     <html
-      lang="en"
+      lang="pt-BR"
       className={`${geistSans.variable} ${geistMono.variable} font-sans h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <ThemeProvider
+         attribute="class"
+         defaultTheme="system"
+         enableSystem
+         disableTransitionOnChange
+        >
           <Providers>
             <AuthProvider>
               <TooltipProvider>
@@ -63,6 +49,7 @@ export default async function RootLayout({
               </TooltipProvider>
             </AuthProvider>
           </Providers>
+        </ThemeProvider>
         </body>
     </html>
   );
