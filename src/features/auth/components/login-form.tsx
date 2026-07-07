@@ -23,7 +23,7 @@ export function LoginForm() {
 
     return(
         <main className='bg-linear-to-t from-red-500 to-amber-200 min-h-dvh w-full p-4 grid place-items-center sm:p-8 '>
-            <form className='p-6 bg-white rounded-2xl w-full max-w-md gap-10 grid place-items-center shadow-[12px_15px_10px_-5px_rgba(0,0,0,0.15)]' onSubmit={handleSubmit(onSubmit)}>
+            <form className='p-6 bg-card rounded-2xl w-full max-w-md gap-10 grid place-items-center shadow-[12px_15px_10px_-5px_rgba(0,0,0,0.15)]' onSubmit={handleSubmit(onSubmit)}>
                 <h1 className='font-extrabold text-2xl mb-4 text-center text-primary-red'>LOGIN</h1>
                 <Field>
                     <FieldLabel htmlFor='email' className='font-bold'>Email</FieldLabel>
@@ -32,16 +32,16 @@ export function LoginForm() {
                     <FieldLabel htmlFor='password' className='font-bold'>Senha</FieldLabel>
                     <Input id='password' type='password' placeholder='Digite sua senha...' {...register('password')} />
                 </Field>
-                <Button className='bg-primary-red w-full h-10 mt-4 rounded-b-md' disabled={isSubmitting || isLoading} type='submit'>
+                <Button className='bg-primary-red w-full h-10 mt-4 rounded-b-md text-white' disabled={isSubmitting || isLoading} type='submit'>
                     {isSubmitting ? (
                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     ) : (
                        <p>Entrar</p> 
                     )}
                 </Button>
-            <Link href='#' className='text-sm font-medium pb-8 hover:underline'>
+            {/* <Link href='#' className='text-sm font-medium pb-8 hover:underline'>
                 Não possui cadastro? Cadastre-se agora!
-            </Link>
+            </Link> */}
             </form>
         </main>
     )

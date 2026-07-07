@@ -66,7 +66,7 @@ export function ListaCrismandos({crismandos} : Props) {
                 }}
                 className='w-full'
             />
-            <Link href='/dashboard/crismandos/register' className={cn(buttonVariants(), 'bg-primary-red px-6 py-4 w-full')}>
+            <Link href='/dashboard/crismandos/register' className={cn(buttonVariants(), 'bg-primary-red px-6 py-4 w-full text-white')}>
                 <UserPlus/> Adicionar crismando
             </Link>
             <CrismandosFiltros
@@ -122,7 +122,7 @@ export function ListaCrismandos({crismandos} : Props) {
                 )}
             </div>
             { visibleCount < filteredList.length && (
-            <Button onClick={handleLoadMore} className='mt-4 w-full bg-primary-red'>
+            <Button onClick={handleLoadMore} className='mt-4 w-full bg-primary-red text-white'>
                 Carregar mais
             </Button>
             )}
