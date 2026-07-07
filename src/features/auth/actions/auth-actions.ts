@@ -6,11 +6,11 @@ import { apiAxios } from '@/lib/api';
 
 
 export async function getProfile(){
-  const api = apiAxios();
+  const api = await apiAxios();
 
-  const response = (await api).get('/auth/me')
+  const response = await api.get('/auth/me')
 
-  return (await response).data;
+  return await response.data;
 }
 
 export async function handleLoginAction(data: LoginSchemaFormType) {
