@@ -43,7 +43,7 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
-        <h1 className='font-bold text-xl'>Olá, {user?.nome}</h1>
+        <h1 className='font-bold text-xl'>Olá, {user?.nomeAnimador}</h1>
         </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
