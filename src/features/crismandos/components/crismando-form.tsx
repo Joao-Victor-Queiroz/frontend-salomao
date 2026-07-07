@@ -64,7 +64,7 @@ export function CrismandoForm({ type, initialValues}: Props) {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
-            <SectionTitle title={type === "REGISTER" ? "Cadastrar Crismando(a)" : `Editar Crismando(a): ${initialValues?.nomeCrismando}`}/>
+            <SectionTitle isIcon title={type === "REGISTER" ? "Cadastrar Crismando(a)" : `Editar Crismando(a): ${initialValues?.nomeCrismando}`}/>
            <section>
                 <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 border-b pb-2">
                 <User size={20} className="text-blue-600" /> Dados Pessoais

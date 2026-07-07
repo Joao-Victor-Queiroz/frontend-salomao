@@ -55,7 +55,7 @@ export function CrismandoPageDetails({ crismando }: Props) {
     return (
         <div className="space-y-6 max-w-4xl mx-auto p-4">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b pb-4">
-                <SectionTitle title={crismando.nomeCrismando} className="text-center sm:text-start"/>
+                <SectionTitle isIcon title={crismando.nomeCrismando} className="text-center sm:text-start"/>
                 <nav className="flex flex-col gap-4 sm:flex-row">
                     <Link 
                         href={`/dashboard/crismandos/${crismando.id}/edit`} 
