@@ -48,9 +48,9 @@ export function GrupoPageDetails({ grupo } : Props){
 
     }
     return(
-        <div>
-            <div>
-                <SectionTitle title={grupo.nomeGrupo}/>
+        <main>
+            <SectionTitle isIcon title={grupo.nomeGrupo}/>
+            <div className="flex flex-col gap-2 sm:flex-row">
                 <AddCrismandosDialog grupoId={grupo.id}/>
                 <Link href={`/dashboard/grupos/${grupo.id}/frequencia`} className={buttonVariants()}>Registrar Frequência</Link>
             </div>
@@ -107,7 +107,7 @@ export function GrupoPageDetails({ grupo } : Props){
                     handleRemoverCrismando({ grupoId: grupo.id, crismandoId: crismandoSelecionadoId });
                 }}
             />
-        </div>
+        </main>
     )
 }
 

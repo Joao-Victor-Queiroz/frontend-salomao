@@ -4,8 +4,6 @@ import {
     DialogHeader,
     DialogTitle,
     DialogDescription,
-    DialogFooter,
-    DialogClose,
     DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button, buttonVariants } from "@/components/ui/button";
