@@ -1,3 +1,4 @@
+"use server"
 import axios, { AxiosError } from "axios";
 import { cookies } from "next/headers";
 import { handleLogoutAction, updateSession } from "@/features/auth";
