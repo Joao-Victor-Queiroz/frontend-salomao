@@ -42,9 +42,9 @@ Para lidar com a rotação de *Refresh Tokens*, desenvolvi uma arquitetura robus
 
 A aplicação está em pleno desenvolvimento, ganhando novas formas e funcionalidades a cada ciclo. O roadmap para as próximas entregas inclui:
 
-- [ ] Registro e gerenciamento de grupos
-- [ ] Registro de caixinha e controle de frequência
-- [ ] Filtragem avançada de crismandos
+- [X] Registro e gerenciamento de grupos
+- [X] Registro de caixinha e controle de frequência
+- [x] Filtragem avançada de crismandos
 - [ ] Geração de relatórios
 
 ## Como Executar Localmente
