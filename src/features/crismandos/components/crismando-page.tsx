@@ -63,6 +63,12 @@ export function CrismandoPageDetails({ crismando }: Props) {
                     >
                         Editar crismando
                     </Link>
+                    <Link 
+                        href={`/dashboard/crismandos/${crismando.id}/frequencia`} 
+                        className={buttonVariants({ variant: "default" })}
+                    >
+                        Frequência completa
+                    </Link>
                     <CrismandoCaixinhaRegister crismandoId={crismando.id} />
                     {
                         doesCargoMatches && (

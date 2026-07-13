@@ -5,5 +5,6 @@ export default async function FrequenciaCrismandoPage({params} : {params: Promis
     const {id} = await params;
     const frequencias = await buscarFrequenciasPorCrismando(id);
 
-    return <ListaFrequencia frequencias={frequencias.data} nomeCrismando={frequencias.data.nomeCrismando} />
+
+    return <ListaFrequencia frequencias={frequencias.data?.frequencias} nomeCrismando={frequencias.data.nomeCrismando}/>
 }
