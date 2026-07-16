@@ -33,7 +33,7 @@ export function CrismandoPageDetails({ crismando }: Props) {
 
     const faltas = crismando.frequencias?.filter(f => f.status === 'FJ' || f.status === 'FNJ') || [];
     const { user } = useAuth();
-    const doesCargoMatches = user?.cargo === Cargo.COORDENADOR_FREQUENCIA || user?.cargo === Cargo.FORMADOR;
+    const doesCargoMatches = user?.cargo === Cargo.COORDENADOR_FREQUENCIA || user?.cargo === Cargo.COORDENADOR_GERAL;
     const router = useRouter();
 
     async function handleApagarCrismando(idCrismando: string) {
@@ -53,10 +53,10 @@ export function CrismandoPageDetails({ crismando }: Props) {
     }
 
     return (
-        <div className="space-y-6 max-w-4xl mx-auto p-4">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b pb-4">
-                <SectionTitle isIcon title={crismando.nomeCrismando} className="text-center sm:text-start"/>
-                <nav className="flex flex-col gap-4 sm:flex-row">
+        <div>
+            <SectionTitle isIcon title={crismando.nomeCrismando} />
+            <div className="sm:justify-between gap-4 border-b pb-4">
+                <nav className="flex flex-col gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-4">
                     <Link 
                         href={`/dashboard/crismandos/${crismando.id}/edit`} 
                         className={buttonVariants({ variant: "default" })}
@@ -81,7 +81,7 @@ export function CrismandoPageDetails({ crismando }: Props) {
                 </nav>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid gap-6 mt-4 md:grid-cols-2">
                 <Card>
                     <CardHeader className="flex flex-row items-center space-x-2 pb-2">
                         <User className="h-5 w-5 text-muted-foreground" />
