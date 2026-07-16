@@ -3,6 +3,8 @@ import { Frequencia, StatusFrequencia } from "@/features/crismandos";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, FileText, Pencil } from "lucide-react";
+import { useState } from "react";
+import { EditarFrequenciaDialog } from "./editar-frequencia-dialog";
 
 const FREQUENCIA_CONFIGS: Record<StatusFrequencia, {
     label: string;
@@ -31,6 +33,7 @@ const FREQUENCIA_CONFIGS: Record<StatusFrequencia, {
 };
 
 export function FrequenciaItem({ frequencia }: { frequencia: Frequencia }) {
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
     const config = FREQUENCIA_CONFIGS[frequencia.status];
     const dataFormatada = new Date(frequencia.dataFrequencia).toLocaleDateString('pt-BR', {
         timeZone: 'UTC',
@@ -40,45 +43,52 @@ export function FrequenciaItem({ frequencia }: { frequencia: Frequencia }) {
     });
 
     return (
-        <div className={`p-3.5 rounded-lg border-y border-r border-l-4 text-sm flex flex-col gap-2.5 transition-colors ${config.containerClass}`}>
-            <div className="flex items-center justify-between gap-4 w-full">
-                <div className="flex items-center gap-2 text-muted-foreground">
-                    <Calendar className="h-4 w-4 shrink-0" />
-                    <span className="font-semibold text-foreground">
-                        {dataFormatada}
-                    </span>
-                </div>
-                
-                <div className="flex items-center gap-2">
-                    <Badge 
-                        variant={config.badgeVariant}
-                        className={`text-[11px] sm:text-xs font-semibold uppercase tracking-wider whitespace-nowrap ${config.badgeClass}`}
-                    >
-                        {config.label}
-                    </Badge>
+        <>
+            <div className={`p-3.5 rounded-lg border-y border-r border-l-4 text-sm flex flex-col gap-2.5 transition-colors ${config.containerClass}`}>
+                <div className="flex items-center justify-between gap-4 w-full">
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                        <Calendar className="h-4 w-4 shrink-0" />
+                        <span className="font-semibold text-foreground">
+                            {dataFormatada}
+                        </span>
+                    </div>
                     
-                    <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="h-8 w-8 text-muted-foreground hover:text-foreground"
-                        title="Editar frequência"
-                        onClick={() => {
-                        }}
-                    >
-                        <Pencil className="h-4 w-4" />
-                    </Button>
-                </div>
-            </div>
-
-            {frequencia.status === 'FJ' && (
-                <div className="bg-background/80 p-2.5 rounded border border-dashed text-xs text-muted-foreground flex gap-1.5 items-start">
-                    <FileText className="h-3.5 w-3.5 mt-0.5 shrink-0 text-amber-500" />
-                    <div className="wrap-break-word w-full">
-                        <span className="font-semibold text-foreground block mb-0.5">Motivo/Justificativa:</span>
-                        {frequencia.justificativa?.trim() ? frequencia.justificativa : "Sem justificativa detalhada por escrito."}
+                    <div className="flex items-center gap-2">
+                        <Badge 
+                            variant={config.badgeVariant}
+                            className={`text-[11px] sm:text-xs font-semibold uppercase tracking-wider whitespace-nowrap ${config.badgeClass}`}
+                        >
+                            {config.label}
+                        </Badge>
+                        
+                        <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                            title="Editar frequência"
+                            onClick={() => setIsDialogOpen(true)}
+                        >
+                            <Pencil className="h-4 w-4" />
+                        </Button>
                     </div>
                 </div>
-            )}
-        </div>
+
+                {frequencia.status === 'FJ' && (
+                    <div className="bg-background/80 p-2.5 rounded border border-dashed text-xs text-muted-foreground flex gap-1.5 items-start">
+                        <FileText className="h-3.5 w-3.5 mt-0.5 shrink-0 text-amber-500" />
+                        <div className="wrap-break-word w-full">
+                            <span className="font-semibold text-foreground block mb-0.5">Motivo/Justificativa:</span>
+                            {frequencia.justificativa?.trim() ? frequencia.justificativa : "Sem justificativa detalhada por escrito."}
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            <EditarFrequenciaDialog 
+                frequencia={frequencia} 
+                open={isDialogOpen} 
+                onOpenChange={setIsDialogOpen} 
+            />
+        </>
     );
 }
