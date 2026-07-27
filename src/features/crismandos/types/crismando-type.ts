@@ -23,8 +23,11 @@ id: string;
   justificativa: string;
 };
 
+import { Caixinha } from "@/features/caixinha/types";
+
 export type CrismandoComFrequenciaECaixinha = Crismando & {
-  frequencias: Frequencia[];
+  frequencias?: Frequencia[];
+  caixinhas?: Caixinha[];
 };
 
 export type StatusFrequencia = 'P' | 'FNJ' | 'FJ'

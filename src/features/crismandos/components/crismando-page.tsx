@@ -5,15 +5,16 @@ import Link from 'next/link';
 import { buttonVariants, Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Phone, User, ShieldCheck, AlertCircle, FileText, Trash } from "lucide-react";
+import { Calendar, Phone, User, ShieldCheck, AlertCircle, FileText, Trash, Coins } from "lucide-react";
 import { useAuth } from "@/features/auth";
-import {Cargo} from '@/features/auth/types/enum-cargo'
+import { Cargo } from '@/features/auth/types/enum-cargo';
 import { ConfirmarAcaoDialog } from "@/components/confirmar-acao-dialog";
 import { useState } from "react";
 import { toast } from "sonner";
 import { apagarCrismando } from "../actions";
 import { useRouter } from "next/navigation";
-import {CrismandoCaixinhaRegister} from "@/features/crismandos/components/crismando-caixinha-register";
+import { CrismandoCaixinhaRegister } from "@/features/crismandos/components/crismando-caixinha-register";
+import { Caixinha } from "@/features/caixinha/types";
 
 type Frequencia = {
     id: string;
@@ -24,14 +25,24 @@ type Frequencia = {
 }
 
 type Props = {
-    crismando: Crismando & { frequencias?: Frequencia[] };
+    crismando: Crismando & { 
+        frequencias?: Frequencia[];
+        caixinhas?: Caixinha[];
+    };
 }
 
 export function CrismandoPageDetails({ crismando }: Props) {
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-    const [isLoadingRemocao, setIsLoadingRemocao] = useState<boolean>(false);
+    const [, setIsLoadingRemocao] = useState<boolean>(false);
 
     const faltas = crismando.frequencias?.filter(f => f.status === 'FJ' || f.status === 'FNJ') || [];
+    const totalCaixinha = crismando.caixinhas?.reduce((acc, curr) => acc + Number(curr.valorPago || 0), 0) || 0;
+    
+    const totalCaixinhaFormatado = new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+    }).format(totalCaixinha);
+
     const { user } = useAuth();
     const doesCargoMatches = user?.cargo === Cargo.COORDENADOR_FREQUENCIA || user?.cargo === Cargo.COORDENADOR_GERAL;
     const router = useRouter();
@@ -56,7 +67,7 @@ export function CrismandoPageDetails({ crismando }: Props) {
         <div>
             <SectionTitle isIcon title={crismando.nomeCrismando} />
             <div className="sm:justify-between gap-4 border-b pb-4">
-                <nav className="flex flex-col gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-4">
+                <nav className="flex flex-col gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-5">
                     <Link 
                         href={`/dashboard/crismandos/${crismando.id}/edit`} 
                         className={buttonVariants({ variant: "default" })}
@@ -68,6 +79,12 @@ export function CrismandoPageDetails({ crismando }: Props) {
                         className={buttonVariants({ variant: "default" })}
                     >
                         Frequência completa
+                    </Link>
+                    <Link 
+                        href={`/dashboard/crismandos/${crismando.id}/caixinha`} 
+                        className={buttonVariants({ variant: "default" })}
+                    >
+                        Histórico de caixinha
                     </Link>
                     <CrismandoCaixinhaRegister crismandoId={crismando.id} />
                     {
@@ -81,8 +98,8 @@ export function CrismandoPageDetails({ crismando }: Props) {
                 </nav>
             </div>
 
-            <div className="grid gap-6 mt-4 md:grid-cols-2">
-                <Card>
+            <div className="grid gap-6 mt-4 md:grid-cols-2 md:col-span-2">
+                <Card className="md:col-span-2">
                     <CardHeader className="flex flex-row items-center space-x-2 pb-2">
                         <User className="h-5 w-5 text-muted-foreground" />
                         <CardTitle className="text-lg font-medium">Dados Pessoais</CardTitle>
@@ -107,6 +124,29 @@ export function CrismandoPageDetails({ crismando }: Props) {
 
                 <Card>
                     <CardHeader className="flex flex-row items-center space-x-2 pb-2">
+                        <Coins className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                        <CardTitle className="text-lg font-medium">Caixinha</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4 pt-2">
+                        <div className="flex items-center justify-between border-b pb-2">
+                            <span className="text-sm text-muted-foreground">Total Pago:</span>
+                            <span className="font-bold text-emerald-600 dark:text-emerald-400 text-lg">
+                                {totalCaixinhaFormatado}
+                            </span>
+                        </div>
+                        <div className="flex justify-end pt-1">
+                            <Link 
+                                href={`/dashboard/crismandos/${crismando.id}/caixinha`} 
+                                className={buttonVariants({ variant: "outline", size: "sm" })}
+                            >
+                                Ver Histórico de Caixinha
+                            </Link>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <Card>
+                    <CardHeader className="flex flex-row items-center space-x-2 pb-2">
                         <ShieldCheck className="h-5 w-5 text-muted-foreground" />
                         <CardTitle className="text-lg font-medium">Sacramentos</CardTitle>
                     </CardHeader>
@@ -125,6 +165,7 @@ export function CrismandoPageDetails({ crismando }: Props) {
                         </div>
                     </CardContent>
                 </Card>
+
                 <Card className="md:col-span-2">
                     <CardHeader>
                         <CardTitle className="text-lg font-medium">Filiação</CardTitle>
@@ -205,7 +246,7 @@ export function CrismandoPageDetails({ crismando }: Props) {
                     </CardContent>
                 </Card>
             </div>
-              <ConfirmarAcaoDialog 
+            <ConfirmarAcaoDialog 
                 open={isDialogOpen} 
                 onClose={() => setIsDialogOpen(false)} 
                 onConfirmar={() => handleApagarCrismando(crismando.id)} 
