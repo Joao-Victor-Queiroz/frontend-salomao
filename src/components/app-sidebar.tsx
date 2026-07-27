@@ -8,7 +8,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import {LayoutDashboard, User, Users, LogOut} from "lucide-react"
+import {LayoutDashboard, User, Users, LogOut, Cake} from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useAuth } from "@/features/auth"
@@ -33,6 +33,11 @@ const items = [
     title: 'Grupos',
     url: '/dashboard/grupos',
     icon: Users,
+  },
+  {
+    title: "Aniversários",
+    url: "/dashboard/aniversarios",
+    icon: Cake,
   }
 ]
 

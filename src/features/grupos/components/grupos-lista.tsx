@@ -14,7 +14,7 @@ export function GruposLista({ data } : Props) {
     return(
         <div className="mb-8">
             <SectionTitle title="Grupos"/>
-            <Link href="/dashboard/grupos/register" className={cn(buttonVariants(), 'bg-primary-red px-6 py-4')}>
+            <Link href="/dashboard/grupos/register" className={cn(buttonVariants(), 'bg-primary-red px-6 py-4 text-white')}>
                 Adicionar grupo
             </Link>
             <div className="flex flex-col gap-4 pt-6">
