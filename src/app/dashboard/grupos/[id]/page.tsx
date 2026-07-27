@@ -8,5 +8,5 @@ export default async function GrupoPage({params} :  {params: Promise<{id: string
 
     console.log("Grupo recebido: ", grupo)
 
-    return <GrupoPageDetails grupo={grupo} />
+    return <GrupoPageDetails grupo={grupo}/>
 }

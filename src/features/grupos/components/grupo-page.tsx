@@ -21,6 +21,8 @@ import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, Trash } from "lucide-react";
 import { ConfirmarAcaoDialog } from "@/components/confirmar-acao-dialog";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { GrupoRelatorioPDF } from "../PDFReport/grupo-relatorio-pdf";
 
 type Props = {
     grupo: Grupo;
@@ -52,6 +54,9 @@ export function GrupoPageDetails({ grupo } : Props){
             <SectionTitle isIcon title={grupo.nomeGrupo}/>
             <div className="flex flex-col gap-2 sm:flex-row">
                 <AddCrismandosDialog grupoId={grupo.id}/>
+                <PDFDownloadLink document={<GrupoRelatorioPDF grupo={grupo} />} fileName={`relatorio-grupo-${grupo.nomeGrupo.toLowerCase().replace(/\s+/g, '')}_${new Date().toISOString().split('T')[0]}.pdf`} className={cn(buttonVariants({variant:'default'}), 'flex items-center gap-2')}>
+                 Gerar relatório
+                </PDFDownloadLink>
                 <Link href={`/dashboard/grupos/${grupo.id}/frequencia`} className={buttonVariants()}>Registrar Frequência</Link>
             </div>
             <div>
