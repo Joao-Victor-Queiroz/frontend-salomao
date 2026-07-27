@@ -5,16 +5,19 @@ import Link from 'next/link';
 import { buttonVariants, Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Phone, User, ShieldCheck, AlertCircle, FileText, Trash, Coins } from "lucide-react";
+import { Calendar, Phone, User, ShieldCheck, AlertCircle, FileText, Trash, Coins, Printer } from "lucide-react";
 import { useAuth } from "@/features/auth";
 import { Cargo } from '@/features/auth/types/enum-cargo';
 import { ConfirmarAcaoDialog } from "@/components/confirmar-acao-dialog";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { apagarCrismando } from "../actions";
 import { useRouter } from "next/navigation";
 import { CrismandoCaixinhaRegister } from "@/features/crismandos/components/crismando-caixinha-register";
 import { Caixinha } from "@/features/caixinha/types";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { CrismandoRelatorioPDF } from "../PDFReport/crismando-relatorio-pdf";
+import { cn } from "@/lib/utils";
 
 type Frequencia = {
     id: string;
@@ -34,6 +37,11 @@ type Props = {
 export function CrismandoPageDetails({ crismando }: Props) {
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
     const [, setIsLoadingRemocao] = useState<boolean>(false);
+    const [isClient, setIsClient] = useState<boolean>(false);
+
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
 
     const faltas = crismando.frequencias?.filter(f => f.status === 'FJ' || f.status === 'FNJ') || [];
     const totalCaixinha = crismando.caixinhas?.reduce((acc, curr) => acc + Number(curr.valorPago || 0), 0) || 0;
@@ -63,11 +71,13 @@ export function CrismandoPageDetails({ crismando }: Props) {
         router.push('/dashboard/crismandos')
     }
 
+    const nomeArquivoPdf = `relatorio-${crismando.nomeCrismando.toLowerCase().replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+
     return (
         <div>
             <SectionTitle isIcon title={crismando.nomeCrismando} />
             <div className="sm:justify-between gap-4 border-b pb-4">
-                <nav className="flex flex-col gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-5">
+                <nav className="flex flex-col gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
                     <Link 
                         href={`/dashboard/crismandos/${crismando.id}/edit`} 
                         className={buttonVariants({ variant: "default" })}
@@ -87,18 +97,28 @@ export function CrismandoPageDetails({ crismando }: Props) {
                         Histórico de caixinha
                     </Link>
                     <CrismandoCaixinhaRegister crismandoId={crismando.id} />
-                    {
-                        doesCargoMatches && (
-                            <Button className='bg-primary-red' onClick={() => setIsDialogOpen(true)}>
-                                <Trash />
-                                Apagar crismando
-                            </Button>
-                        )
-                    }
+                    
+                    {isClient && (
+                        <PDFDownloadLink
+                            document={<CrismandoRelatorioPDF crismando={crismando} />}
+                            fileName={nomeArquivoPdf}
+                            className={cn(buttonVariants({ variant: "secondary" }), "flex items-center gap-2")}
+                        >
+                            <Printer className="h-4 w-4" />
+                            Gerar Relatório PDF
+                        </PDFDownloadLink>
+                    )}
+
+                    {doesCargoMatches && (
+                        <Button className='bg-primary-red' onClick={() => setIsDialogOpen(true)}>
+                            <Trash className="h-4 w-4" />
+                            Apagar crismando
+                        </Button>
+                    )}
                 </nav>
             </div>
 
-            <div className="grid gap-6 mt-4 md:grid-cols-2 md:col-span-2">
+            <div className="grid gap-6 mt-4 md:grid-cols-2">
                 <Card className="md:col-span-2">
                     <CardHeader className="flex flex-row items-center space-x-2 pb-2">
                         <User className="h-5 w-5 text-muted-foreground" />
