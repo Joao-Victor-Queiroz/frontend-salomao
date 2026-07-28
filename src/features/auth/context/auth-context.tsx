@@ -45,7 +45,7 @@ export function AuthProvider({ children} : { children: React.ReactNode;}){
                 const response = await getProfile();
 
                 if (response) {
-                    const userName = response.nome || response.animador?.nomeAnimador || response.nomeAnimador;
+                    const userName = response.nome || response.animador?.nomeAnimador || response.nomeAnimador || "";
                     const userData = {
                         ...response,
                         nome: userName,
@@ -81,7 +81,7 @@ export function AuthProvider({ children} : { children: React.ReactNode;}){
         mutationFn: (data: LoginSchemaFormType) => handleLoginAction(data),
         onSuccess: (data) => {
             if (data.success && data.user) {
-                const userName = data.user.nome || data.user.nomeAnimador;
+                const userName = data.user.nome || data.user.nomeAnimador || "";
                 const userData = {
                     ...data.user,
                     nome: userName,
