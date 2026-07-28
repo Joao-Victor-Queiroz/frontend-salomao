@@ -9,7 +9,8 @@ import { Calendar, Phone, User, ShieldCheck, AlertCircle, FileText, Trash, Coins
 import { useAuth } from "@/features/auth";
 import { Cargo } from '@/features/auth/types/enum-cargo';
 import { ConfirmarAcaoDialog } from "@/components/confirmar-acao-dialog";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useIsMounted } from "@/hooks/use-is-mounted";
 import { toast } from "sonner";
 import { apagarCrismando } from "../actions";
 import { useRouter } from "next/navigation";
@@ -37,11 +38,7 @@ type Props = {
 export function CrismandoPageDetails({ crismando }: Props) {
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
     const [, setIsLoadingRemocao] = useState<boolean>(false);
-    const [isClient, setIsClient] = useState<boolean>(false);
-
-    useEffect(() => {
-        setIsClient(true);
-    }, []);
+    const isClient = useIsMounted();
 
     const faltas = crismando.frequencias?.filter(f => f.status === 'FJ' || f.status === 'FNJ') || [];
     const totalCaixinha = crismando.caixinhas?.reduce((acc, curr) => acc + Number(curr.valorPago || 0), 0) || 0;

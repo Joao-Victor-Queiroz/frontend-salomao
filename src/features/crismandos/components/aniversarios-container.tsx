@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
+import { useIsMounted } from "@/hooks/use-is-mounted"
 import { CrismandoComGrupo } from "../components"
 import { SectionTitle } from "@/components/section-title"
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
@@ -50,11 +51,7 @@ function isAniversarioNoIntervalo(dataNascimento: string, startIso: string, endI
 export function AniversariosContainer({ crismandos }: Props) {
     const [dataInicial, setDataInicial] = useState<string>("")
     const [dataFinal, setDataFinal] = useState<string>("")
-    const [isMounted, setIsMounted] = useState(false)
-
-    useEffect(() => {
-        setIsMounted(true)
-    }, [])
+    const isMounted = useIsMounted()
 
     const datasPreenchidas = Boolean(dataInicial && dataFinal);
 

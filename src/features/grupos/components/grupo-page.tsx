@@ -23,6 +23,7 @@ import { Loader2, Trash } from "lucide-react";
 import { ConfirmarAcaoDialog } from "@/components/confirmar-acao-dialog";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { GrupoRelatorioPDF } from "../PDFReport/grupo-relatorio-pdf";
+import { useIsMounted } from "@/hooks/use-is-mounted";
 
 type Props = {
     grupo: Grupo;
@@ -32,6 +33,7 @@ export function GrupoPageDetails({ grupo } : Props){
     const [openDialog, setOpenDialog] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [crismandoSelecionadoId, setCrismandoSelecionadoId] = useState<string | null>(null);
+    const isMounted = useIsMounted();
 
     const handleRemoverCrismando = async({grupoId, crismandoId}: {grupoId: string, crismandoId: string}) => {
         setIsLoading(true)
@@ -54,9 +56,11 @@ export function GrupoPageDetails({ grupo } : Props){
             <SectionTitle isIcon title={grupo.nomeGrupo}/>
             <div className="flex flex-col gap-2 sm:flex-row">
                 <AddCrismandosDialog grupoId={grupo.id}/>
-                <PDFDownloadLink document={<GrupoRelatorioPDF grupo={grupo} />} fileName={`relatorio-grupo-${grupo.nomeGrupo.toLowerCase().replace(/\s+/g, '')}_${new Date().toISOString().split('T')[0]}.pdf`} className={cn(buttonVariants({variant:'default'}), 'flex items-center gap-2')}>
-                 Gerar relatório
-                </PDFDownloadLink>
+                {isMounted && (
+                    <PDFDownloadLink document={<GrupoRelatorioPDF grupo={grupo} />} fileName={`relatorio-grupo-${grupo.nomeGrupo.toLowerCase().replace(/\s+/g, '')}_${new Date().toISOString().split('T')[0]}.pdf`} className={cn(buttonVariants({variant:'default'}), 'flex items-center gap-2')}>
+                     Gerar relatório
+                    </PDFDownloadLink>
+                )}
                 <Link href={`/dashboard/grupos/${grupo.id}/frequencia`} className={buttonVariants()}>Registrar Frequência</Link>
             </div>
             <div>
@@ -65,7 +69,7 @@ export function GrupoPageDetails({ grupo } : Props){
                     {grupo.crismandos?.length === 0 && <p>Nenhum crismando no grupo.</p>}
 
                     {grupo.crismandos?.map((crismando) => {
-                        const numeroFaltas = crismando.frequencias.filter(frequencia => frequencia.status !== 'P').length;
+                        const numeroFaltas = crismando.frequencias?.filter(frequencia => frequencia.status !== 'P').length || 0;
                     return (
                         <Card key={crismando.id}>
                             <CardHeader>

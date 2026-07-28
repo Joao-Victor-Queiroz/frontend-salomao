@@ -67,7 +67,7 @@ export function GrupoRelatorioPDF({grupo} : Props){
                         Total de crismandos: {grupo.crismandos.length}
                     </Text>
                     {grupo.crismandos.map(crismando => {
-                        const numeroFaltasCrismando = crismando.frequencias.filter(freq => freq.status !== "P" ).length;
+                        const numeroFaltasCrismando = crismando.frequencias?.filter(freq => freq.status !== "P" ).length || 0;
                         return(
                             <View style={styles.crismandoInfoView} key={crismando.id}>
                                 <Text style={styles.crismandoInfoText}>{crismando.nomeCrismando}</Text>
