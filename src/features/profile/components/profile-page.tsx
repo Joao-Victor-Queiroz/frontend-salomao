@@ -68,7 +68,7 @@ export function ProfilePage() {
     
     return(
         <main>
-            <SectionTitle title={`Bem vindo(a), ${user.nomeAnimador}!`}/>
+            <SectionTitle title={`Bem vindo(a), ${user.nome || user.nomeAnimador}!`}/>
 
             <div className="grid gap-4 lg:grid-cols-3 mt-10">
                 
@@ -79,7 +79,7 @@ export function ProfilePage() {
                     </CardHeader>
                     <CardContent>
                         <p className='text-lg'> <span className="font-bold">Cargo:</span> {CARGO_LABELS[user.cargo]}</p>
-                        <p className='text-lg'> <span className="font-bold">Nome completo:</span> {user.nomeAnimador}</p>
+                        <p className='text-lg'> <span className="font-bold">Nome completo:</span> {user.nome || user.nomeAnimador}</p>
                     </CardContent>
                 </Card>
                 <Card>

@@ -2,11 +2,12 @@ import { Cargo } from "./enum-cargo";
 
 export type UserType = {
     id: string;
-    nomeAnimador: string;
+    nome: string;
+    nomeAnimador?: string;
     email: string;
-    password: string;
+    password?: string;
     cargo: Cargo;
-    dataNascimento: string;
-    grupoAnimadorId: string;
-    grupoCrismandoId: string;
+    dataNascimento?: string;
+    grupoAnimadorId?: string | null;
+    grupoCrismandoId?: string | null;
 }

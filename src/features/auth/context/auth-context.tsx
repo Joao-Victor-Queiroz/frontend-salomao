@@ -16,7 +16,7 @@ type AuthContextType = {
     signOut: () => void;
 }
 
-type UserLoginType = Omit<UserType, 'id' | 'email' | 'password'>
+type UserLoginType = Omit<UserType, 'password'>;
 
 export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
@@ -45,9 +45,11 @@ export function AuthProvider({ children} : { children: React.ReactNode;}){
                 const response = await getProfile();
 
                 if (response) {
+                    const userName = response.nome || response.animador?.nomeAnimador || response.nomeAnimador;
                     const userData = {
                         ...response,
-                        nome: response.nomeAnimador || response.nome,
+                        nome: userName,
+                        nomeAnimador: userName,
                     };
                     setUser(userData);
                     localStorage.setItem("user", JSON.stringify(userData));
@@ -79,8 +81,14 @@ export function AuthProvider({ children} : { children: React.ReactNode;}){
         mutationFn: (data: LoginSchemaFormType) => handleLoginAction(data),
         onSuccess: (data) => {
             if (data.success && data.user) {
-                setUser(data.user);
-                localStorage.setItem("user", JSON.stringify(data.user))
+                const userName = data.user.nome || data.user.nomeAnimador;
+                const userData = {
+                    ...data.user,
+                    nome: userName,
+                    nomeAnimador: userName,
+                };
+                setUser(userData);
+                localStorage.setItem("user", JSON.stringify(userData));
                 router.refresh();
                 router.push("/dashboard");
             }
