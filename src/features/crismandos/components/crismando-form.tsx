@@ -261,7 +261,7 @@ export function CrismandoForm({ type, initialValues}: Props) {
             <div className="relative">
               <FileText className="absolute left-3 top-3 text-gray-400" size={18} />
               <textarea 
-                className="w-full pl-10 pr-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none min-h-[100px]"
+                className="w-full pl-10 pr-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none min-h-25"
                 placeholder="Por que deseja fazer a Crisma agora?"
                 {...register('justificativa')}
               />

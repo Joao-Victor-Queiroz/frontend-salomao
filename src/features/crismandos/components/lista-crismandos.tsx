@@ -2,7 +2,6 @@
 import { Crismando } from '../types'; 
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
@@ -10,6 +9,9 @@ import { UserPlus, Search} from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { CrismandosFiltros } from './crismandos-filtros';
 import { SectionTitle } from '@/components/section-title';
+import { doesCargoMatches } from '@/lib/cargo-matches';
+import { useAuth } from '@/features/auth';
+import { Cargo } from '@/features/auth';
 
 export type CrismandoComGrupo = Crismando & {
     nomeGrupo: string;
@@ -20,12 +22,13 @@ type Props = {
 }
 
 export function ListaCrismandos({crismandos} : Props) {
+    const {user} = useAuth();
+
     const [visibleCount, setVisibleCount] = useState(8);
     const [searchName, setSearchName] = useState("");
     const [gruposFilter, setGruposFilter] = useState<string[]>([])
     const [batizadoFilter, setBatizadoFilter] = useState<'Sim' | 'Não' | ''>('')
     const [eucaristiaFilter, setEucaristiaFilter] = useState<'Sim' | 'Não' | ''>('')
-    const router = useRouter();
 
     const normalizedSearch = searchName.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 
@@ -66,9 +69,11 @@ export function ListaCrismandos({crismandos} : Props) {
                 }}
                 className='w-full'
             />
-            <Link href='/dashboard/crismandos/register' className={cn(buttonVariants(), 'bg-primary-red px-6 py-4 w-full text-white')}>
-                <UserPlus/> Adicionar crismando
-            </Link>
+            {user && doesCargoMatches(user.cargo, [Cargo.COORDENADOR_FREQUENCIA, Cargo.ANIMADOR_FREQUENCIA, Cargo.COORDENADOR_GERAL, Cargo.ADMIN]) && (
+                <Link href='/dashboard/crismandos/register' className={cn(buttonVariants(), 'bg-primary-red px-6 py-4 w-full text-white')}>
+                    <UserPlus/> Adicionar crismando
+                </Link>
+            )}
             <CrismandosFiltros
                 gruposOptions={gruposOptions}
                 gruposSelected={gruposFilter}

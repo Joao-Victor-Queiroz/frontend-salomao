@@ -1,22 +1,29 @@
+'use client'
 import { Grupo } from "../types/grupo-type"
 import { SectionTitle } from "@/components/section-title"
 import Link from 'next/link';
 import { ArrowRight  } from 'lucide-react'
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/features/auth';
+import { Cargo } from '@/features/auth';
+import { doesCargoMatches } from "@/lib/cargo-matches";
 
 type Props = {
     data: Grupo[];
 }
 
 export function GruposLista({ data } : Props) {
+    const {user} = useAuth();
 
     return(
         <div className="mb-8">
             <SectionTitle title="Grupos"/>
-            <Link href="/dashboard/grupos/register" className={cn(buttonVariants(), 'bg-primary-red px-6 py-4 text-white')}>
-                Adicionar grupo
-            </Link>
+            {user && doesCargoMatches(user.cargo, [Cargo.COORDENADOR_GERAL, Cargo.ADMIN]) && (
+                <Link href="/dashboard/grupos/register" className={cn(buttonVariants(), 'bg-primary-red px-6 py-4 text-white')}>
+                    Adicionar grupo
+                </Link>
+            )}
             <div className="flex flex-col gap-4 pt-6">
                 {data.length === 0 && (
                     <p className="text-center text-gray-500">
@@ -24,7 +31,7 @@ export function GruposLista({ data } : Props) {
                     </p>
                 )}
                 {data.map((grupo) => (
-                    <Link href={`/dashboard/grupos/${grupo.id}`} className="bg-primary-red p-4 rounded-md text-white flex justify-between items-center shadow-[0px_10px_15px_-3px_rgba(0,_0,_0,_0.1)]" key={grupo.id}>
+                    <Link href={`/dashboard/grupos/${grupo.id}`} className="bg-primary-red p-4 rounded-md text-white flex justify-between items-center shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1)]" key={grupo.id}>
                         <h1 className="font-semibold">{grupo.nomeGrupo}</h1>
                         <ArrowRight />
                     </Link>

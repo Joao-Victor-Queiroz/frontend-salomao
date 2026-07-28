@@ -19,6 +19,7 @@ import { Caixinha } from "@/features/caixinha/types";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { CrismandoRelatorioPDF } from "../PDFReport/crismando-relatorio-pdf";
 import { cn } from "@/lib/utils";
+import { doesCargoMatches } from "@/lib/cargo-matches";
 
 type Frequencia = {
     id: string;
@@ -49,7 +50,6 @@ export function CrismandoPageDetails({ crismando }: Props) {
     }).format(totalCaixinha);
 
     const { user } = useAuth();
-    const doesCargoMatches = user?.cargo === Cargo.COORDENADOR_FREQUENCIA || user?.cargo === Cargo.COORDENADOR_GERAL;
     const router = useRouter();
 
     async function handleApagarCrismando(idCrismando: string) {
@@ -106,8 +106,8 @@ export function CrismandoPageDetails({ crismando }: Props) {
                         </PDFDownloadLink>
                     )}
 
-                    {doesCargoMatches && (
-                        <Button className='bg-primary-red' onClick={() => setIsDialogOpen(true)}>
+                    {user && doesCargoMatches(user.cargo, [Cargo.COORDENADOR_FREQUENCIA, Cargo.COORDENADOR_GERAL, Cargo.ADMIN]) && (
+                        <Button className='bg-primary-red hover:bg-primary-red/80 text-white' onClick={() => setIsDialogOpen(true)}>
                             <Trash className="h-4 w-4" />
                             Apagar crismando
                         </Button>
