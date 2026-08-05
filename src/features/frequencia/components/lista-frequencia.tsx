@@ -13,7 +13,7 @@ export function ListaFrequencia({frequencias, nomeCrismando} : {frequencias: Fre
             <SectionTitle title={`Frequência de ${nomeCrismando}`} className="border-border" isIcon/>
             
             {!temFrequencias ? (
-                <div className="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed rounded-xl bg-muted/30 border-muted-foreground/20 min-h-[300px]">
+                <div className="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed rounded-xl bg-muted/30 border-muted-foreground/20 min-h-75">
                     <div className="p-4 bg-muted rounded-full mb-4">
                         <CalendarX className="w-10 h-10 text-muted-foreground" />
                     </div>

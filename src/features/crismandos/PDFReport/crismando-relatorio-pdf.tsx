@@ -309,6 +309,10 @@ export function CrismandoRelatorioPDF({ crismando }: Props) {
                             <Text style={styles.value}>{crismando.telefoneCrismando || "Não informado"}</Text>
                         </View>
                         <View style={styles.infoItemHalf}>
+                            <Text style={styles.label}>E-mail:</Text>
+                            <Text style={styles.value}>{crismando.email || "Não informado"}</Text>
+                        </View>
+                        <View style={styles.infoItemHalf}>
                             <Text style={styles.label}>Batizado:</Text>
                             <Text style={styles.value}>{crismando.batizado}</Text>
                         </View>
