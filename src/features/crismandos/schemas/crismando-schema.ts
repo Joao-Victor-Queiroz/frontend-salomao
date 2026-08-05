@@ -13,6 +13,7 @@ export const crismandoSchema = z.object({
   bairro: z.string().min(1, "Bairro é obrigatório"),
   cep: z.string().min(8, "CEP deve conter 8 dígitos"),
   telefoneCrismando: z.string().min(10, "Telefone inválido"),
+  email: z.string().email("E-mail inválido").optional().or(z.literal("")),
   nomePai: z.string().min(3, "Nome do pai é obrigatório"),
   nomeMae: z.string().min(3, "Nome da mãe é obrigatório"),
   telefonePai: z.string().optional(),

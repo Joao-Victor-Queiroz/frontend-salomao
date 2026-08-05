@@ -136,6 +136,10 @@ export function CrismandoPageDetails({ crismando }: Props) {
                             <span className="text-muted-foreground">Telefone:</span>
                             <span className="font-semibold">{crismando.telefoneCrismando || "Não informado"}</span>
                         </div>
+                        <div className="flex justify-between pb-1">
+                            <span className="text-muted-foreground">E-mail:</span>
+                            <span className="font-semibold">{crismando.email || "Não informado"}</span>
+                        </div>
                     </CardContent>
                 </Card>
 

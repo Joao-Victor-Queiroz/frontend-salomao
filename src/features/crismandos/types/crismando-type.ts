@@ -14,6 +14,7 @@ id: string;
   bairro: string;
   cep: string;
   telefoneCrismando: string;
+  email?: string;
   nomePai: string;
   nomeMae: string;
   telefonePai?: string;

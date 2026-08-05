@@ -111,6 +111,11 @@ export function CrismandoForm({ type, initialValues}: Props) {
                     />
                 </Field>
 
+                <Field>
+                    <FieldLabel>E-mail</FieldLabel>
+                    <Input type="email" placeholder="email@exemplo.com" error={errors.email?.message} {...register('email')} />
+                </Field>
+
                 <div className="grid grid-cols-3 gap-2 md:col-span-1">
                     <Field className='col-span-2'>
                         <FieldLabel>Cidade Natal</FieldLabel>
