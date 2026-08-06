@@ -73,7 +73,10 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarMenu>
           {visibleItems.map((item) => {
-            const isCurrentActive = pathname === item.url || pathname.startsWith(`${item.url}/`)
+            const isCurrentActive =
+              item.url === "/dashboard"
+                ? pathname === "/dashboard"
+                : pathname === item.url || pathname.startsWith(`${item.url}/`)
 
             return (
               <SidebarMenuItem key={item.url} className="p-2">
