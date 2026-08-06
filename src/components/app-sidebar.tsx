@@ -8,7 +8,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { LayoutDashboard, User, Users, LogOut, Cake, UserCheck, ShieldCheck } from "lucide-react"
+import { User, Users, LogOut, Cake, UserCheck, ShieldCheck } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useAuth, Cargo } from "@/features/auth"
@@ -19,12 +19,7 @@ export function AppSidebar() {
   const { user, signOut } = useAuth()
 
   const navItems = [
-    {
-      title: "Dashboard",
-      url: "/dashboard",
-      icon: LayoutDashboard,
-      show: true,
-    },
+
     {
       title: "Perfil",
       url: "/dashboard/profile",
@@ -76,10 +71,7 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarMenu>
           {visibleItems.map((item) => {
-            const isCurrentActive =
-              item.url === "/dashboard"
-                ? pathname === "/dashboard"
-                : pathname === item.url || pathname.startsWith(`${item.url}/`)
+            const isCurrentActive = pathname === item.url || pathname.startsWith(`${item.url}/`)
 
             return (
               <SidebarMenuItem key={item.url} className="p-2">
