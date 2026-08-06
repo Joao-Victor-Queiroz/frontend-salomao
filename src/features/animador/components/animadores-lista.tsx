@@ -1,6 +1,5 @@
 'use client'
 
-import React from "react";
 import Link from "next/link";
 import { Animador } from "../types";
 import { SectionTitle } from "@/components/section-title";
@@ -26,12 +25,14 @@ export function formatCargo(cargo?: Cargo | string): string {
     COORDENADOR_MUSICA: "Coordenador de Música",
     COORDENADOR_PESCARIA: "Coordenador de Pescaria",
     COORDENADOR_LEMBRANCINHA: "Coordenador de Lembrancinha",
+    COORDENADOR_INTERCESSAO: "Coordenador de Intercessão",
     ANIMADOR_FREQUENCIA: "Animador de Frequência",
     ANIMADOR_CAIXINHA: "Animador de Caixinha",
     ANIMADOR_PESCARIA: "Animador de Pescaria",
     ANIMADOR_COMUNICACAO: "Animador de Comunicação",
     ANIMADOR_MUSICA: "Animador de Música",
     ANIMADOR_LEMBRANCINHA: "Animador de Lembrancinha",
+    ANIMADOR_INTERCESSAO: "Animador de Intercessão",
     ANIMADOR: "Animador",
   };
 

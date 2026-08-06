@@ -145,3 +145,15 @@ export async function registrarFrequenciaAnimadores(data: {
   }
 }
 
+export async function getAnimadoresSemGrupo() {
+  try {
+    const api = await apiAxios();
+    const response = await api.get('/animadores/animadores-sem-grupo');
+    return response.data as Animador[];
+  } catch (error: unknown) {
+    console.error("Erro ao buscar animadores sem grupo: ", error);
+    return [];
+  }
+}
+
+

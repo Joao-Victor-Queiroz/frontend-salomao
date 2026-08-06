@@ -114,3 +114,26 @@ export async function removeCrismandoDoGrupo(grupoId: string, crismandoId: strin
         return { success: false, message: errorMessage}
     }
 }
+
+export async function addAnimadoresAoGrupo(grupoId: string, animadores: string[]) {
+    try {
+        const api = await apiAxios();
+
+        const response = await api.patch(`/grupo/adicionar-animadores/${grupoId}`, { animadores });
+
+        revalidatePath(`/dashboard/grupos/${grupoId}`);
+        revalidatePath('/dashboard/animadores');
+
+        return { success: true, data: response.data, message: 'Animadores adicionados ao grupo com sucesso!' };
+    } catch (error: unknown) {
+        let errorMessage = 'Erro desconhecido';
+
+        if (isAxiosError(error)) {
+            errorMessage = error.response?.data?.message || errorMessage;
+        } else if (error instanceof Error) {
+            errorMessage = error.message;
+        }
+        console.log('Mensagem de erro: ', errorMessage);
+        return { success: false, message: errorMessage };
+    }
+}

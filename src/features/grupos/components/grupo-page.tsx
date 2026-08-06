@@ -25,6 +25,9 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import { GrupoRelatorioPDF } from "../PDFReport/grupo-relatorio-pdf";
 import { useIsMounted } from "@/hooks/use-is-mounted";
 
+import { AddAnimadoresDialog } from "./add-animadores-dialog";
+import { formatCargo } from "@/features/animador";
+
 type Props = {
     grupo: Grupo;
 }
@@ -34,6 +37,13 @@ export function GrupoPageDetails({ grupo } : Props){
     const [isLoading, setIsLoading] = useState(false);
     const [crismandoSelecionadoId, setCrismandoSelecionadoId] = useState<string | null>(null);
     const isMounted = useIsMounted();
+
+    const animadoresDoGrupo = Array.from(
+        new Map((grupo.animadoresMinisterio || grupo.animadores || []).map(a => [a.id, a])).values()
+    );
+    const crismandosDoGrupo = Array.from(
+        new Map((grupo.crismandos || []).map(c => [c.id, c])).values()
+    );
 
     const handleRemoverCrismando = async({grupoId, crismandoId}: {grupoId: string, crismandoId: string}) => {
         setIsLoading(true)
@@ -54,8 +64,9 @@ export function GrupoPageDetails({ grupo } : Props){
     return(
         <main>
             <SectionTitle isIcon title={grupo.nomeGrupo}/>
-            <div className="flex flex-col gap-2 sm:flex-row">
+            <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
                 <AddCrismandosDialog grupoId={grupo.id}/>
+                <AddAnimadoresDialog grupoId={grupo.id}/>
                 {isMounted && (
                     <PDFDownloadLink document={<GrupoRelatorioPDF grupo={grupo} />} fileName={`relatorio-grupo-${grupo.nomeGrupo.toLowerCase().replace(/\s+/g, '')}_${new Date().toISOString().split('T')[0]}.pdf`} className={cn(buttonVariants({variant:'default'}), 'flex items-center gap-2')}>
                      Gerar relatório
@@ -63,15 +74,37 @@ export function GrupoPageDetails({ grupo } : Props){
                 )}
                 <Link href={`/dashboard/grupos/${grupo.id}/frequencia`} className={buttonVariants()}>Registrar Frequência</Link>
             </div>
+
+            <div>
+                <h3 className='font-bold mt-8 text-2xl'>Animadores</h3>
+                <div className='grid grid-cols-2 mt-4 gap-4 md:grid-cols-3 lg:grid-cols-4'>
+                    {animadoresDoGrupo.length === 0 && <p className="text-muted-foreground col-span-full">Nenhum animador no grupo.</p>}
+
+                    {animadoresDoGrupo.map((animador, index) => (
+                        <Card key={`animador-${animador.id}-${index}`}>
+                            <CardHeader>
+                                <CardTitle className='line-clamp-1'>{animador.nomeAnimador}</CardTitle>
+                                <Badge variant="outline" className="w-fit mt-1">{formatCargo(animador.cargo)}</Badge>
+                            </CardHeader>
+                            <CardFooter>
+                                <Link href={`/dashboard/animadores/${animador.id}`} className={cn(buttonVariants({ variant: "outline" }), 'w-full text-xs')}>
+                                    Ver detalhes
+                                </Link>
+                            </CardFooter>
+                        </Card>
+                    ))}
+                </div>
+            </div>
+
             <div>
                 <h3 className='font-bold mt-8 text-2xl'>Crismandos</h3>
                 <div className='grid grid-cols-2 mt-4 gap-4 md:grid-cols-3 lg:grid-cols-4'>
-                    {grupo.crismandos?.length === 0 && <p>Nenhum crismando no grupo.</p>}
+                    {crismandosDoGrupo.length === 0 && <p>Nenhum crismando no grupo.</p>}
 
-                    {grupo.crismandos?.map((crismando) => {
+                    {crismandosDoGrupo.map((crismando, index) => {
                         const numeroFaltas = crismando.frequencias?.filter(frequencia => frequencia.status !== 'P').length || 0;
                     return (
-                        <Card key={crismando.id}>
+                        <Card key={`crismando-${crismando.id}-${index}`}>
                             <CardHeader>
                                 <CardTitle className='line-clamp-1'>{crismando.nomeCrismando}</CardTitle>
                                 {numeroFaltas < 4 ?(
@@ -212,13 +245,13 @@ export function AddCrismandosDialog({ grupoId} : DialogProps) {
         <span className="text-xs text-muted-foreground px-2">Nenhum selecionado</span>
     ) : (
         <>
-            {crismandosSelecionados.slice(0, 3).map((id) => {
+            {crismandosSelecionados.slice(0, 3).map((id, index) => {
                 const crismando = crismandosData.find(c => c.id === id);
                 if (!crismando) return null;
                 
                 return (
                     <div 
-                        key={id} 
+                        key={`crismando-badge-${id}-${index}`} 
                         className="inline-flex items-center gap-1 bg-primary/10 text-primary border border-primary/20 text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap"
                     >
                         {crismando.nomeCrismando}
@@ -253,8 +286,8 @@ export function AddCrismandosDialog({ grupoId} : DialogProps) {
             Nenhum crismando sem grupo encontrado.
         </div>
     ) : (
-        crismandosData.map((crismando) => (
-            <div key={crismando.id} className='flex items-center gap-2 p-2 hover:bg-muted/50 rounded-md'>
+        crismandosData.map((crismando, index) => (
+            <div key={`crismando-option-${crismando.id}-${index}`} className='flex items-center gap-2 p-2 hover:bg-muted/50 rounded-md'>
                 <Checkbox
                     id={crismando.id}
                     disabled={isSubmitting}
