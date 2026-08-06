@@ -8,12 +8,15 @@ import { doesCargoMatches } from "@/lib/cargo-matches";
 import { SectionTitle } from "@/components/section-title";
 import { buttonVariants, Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { UserCheck, Shield, Calendar, Users, User, Edit3, ArrowLeft, Trash2, ClipboardCheck } from "lucide-react";
+import { UserCheck, Shield, Calendar, Users, User, Edit3, ArrowLeft, Trash2, ClipboardCheck, Printer } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { deleteAnimador } from "../actions";
 import { toast } from "sonner";
 import { AnimadorForm } from "./animador-form";
+import { useIsMounted } from "@/hooks/use-is-mounted";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { AnimadorRelatorioPDF } from "../PDFReport/animador-relatorio-pdf";
 
 type Props = {
   animador: Animador;
@@ -22,6 +25,7 @@ type Props = {
 export function AnimadorDetalhe({ animador }: Props) {
   const { user } = useAuth();
   const router = useRouter();
+  const isClient = useIsMounted();
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -30,6 +34,8 @@ export function AnimadorDetalhe({ animador }: Props) {
     Cargo.COORDENADOR_GERAL,
     Cargo.COORDENADOR_FREQUENCIA,
   ]);
+
+  const nomeArquivoPdf = `relatorio-animador-${animador.nomeAnimador.toLowerCase().replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
 
   const formattedDate = animador.dataNascimento
     ? new Date(animador.dataNascimento).toLocaleDateString("pt-BR", {
@@ -86,25 +92,38 @@ export function AnimadorDetalhe({ animador }: Props) {
           <SectionTitle title={`Animador: ${animador.nomeAnimador}`} />
         </div>
 
-        {canEdit && (
-          <div className="flex items-center gap-2">
-            <Button
-              onClick={() => setIsEditing(true)}
-              className="bg-primary-red hover:bg-primary-red/90 text-white flex items-center gap-2"
+        <div className="flex flex-wrap items-center gap-2">
+          {isClient && (
+            <PDFDownloadLink
+              document={<AnimadorRelatorioPDF animador={animador} />}
+              fileName={nomeArquivoPdf}
+              className={cn(buttonVariants({ variant: "secondary" }), "flex items-center gap-2")}
             >
-              <Edit3 size={16} /> Editar Informações
-            </Button>
-            <Button
-              variant="destructive"
-              size="icon"
-              onClick={handleDelete}
-              disabled={isDeleting}
-              title="Excluir Animador"
-            >
-              <Trash2 size={16} />
-            </Button>
-          </div>
-        )}
+              <Printer className="h-4 w-4" />
+              Gerar Relatório PDF
+            </PDFDownloadLink>
+          )}
+
+          {canEdit && (
+            <>
+              <Button
+                onClick={() => setIsEditing(true)}
+                className="bg-primary-red hover:bg-primary-red/90 text-white flex items-center gap-2"
+              >
+                <Edit3 size={16} /> Editar Informações
+              </Button>
+              <Button
+                variant="destructive"
+                size="icon"
+                onClick={handleDelete}
+                disabled={isDeleting}
+                title="Excluir Animador"
+              >
+                <Trash2 size={16} />
+              </Button>
+            </>
+          )}
+        </div>
       </div>
 
       {/* CARD PRINCIPAL */}
