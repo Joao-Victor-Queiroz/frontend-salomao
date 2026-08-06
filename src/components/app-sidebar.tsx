@@ -65,10 +65,13 @@ export function AppSidebar() {
 
   const visibleItems = navItems.filter((item) => item.show)
 
+  const rawName = user?.nome || user?.nomeAnimador || ""
+  const displayName = rawName.trim().split(/\s+/).slice(0, 2).join(" ")
+
   return (
     <Sidebar>
       <SidebarHeader>
-        <h1 className="font-bold text-xl">Olá, {user?.nome || user?.nomeAnimador}</h1>
+        <h1 className="font-bold text-xl">Olá, {displayName}</h1>
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
