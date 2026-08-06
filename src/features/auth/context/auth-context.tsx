@@ -100,6 +100,7 @@ export function AuthProvider({ children} : { children: React.ReactNode;}){
 
     const signOut = () => {
         setUser(null);
+        localStorage.removeItem("user");
         router.push("/");
     }
 
