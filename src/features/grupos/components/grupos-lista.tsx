@@ -14,7 +14,20 @@ type Props = {
 }
 
 export function GruposLista({ data } : Props) {
-    const {user} = useAuth();
+    const { user } = useAuth();
+
+    const canSeeAll = user ? doesCargoMatches(user.cargo, [
+        Cargo.ADMIN,
+        Cargo.COORDENADOR_GERAL,
+        Cargo.COORDENADOR_FREQUENCIA,
+        Cargo.COORDENADOR_CAIXINHA
+    ]) : false;
+
+    const userGrupoId = user?.grupoCrismandoId || user?.grupoAnimadorId;
+
+    const gruposExibidos = canSeeAll 
+        ? data 
+        : data.filter((grupo) => grupo.id === userGrupoId);
 
     return(
         <div className="mb-8">
@@ -25,12 +38,12 @@ export function GruposLista({ data } : Props) {
                 </Link>
             )}
             <div className="flex flex-col gap-4 pt-6">
-                {data.length === 0 && (
+                {gruposExibidos.length === 0 && (
                     <p className="text-center text-gray-500">
                         Nenhum grupo encontrado.
                     </p>
                 )}
-                {data.map((grupo) => (
+                {gruposExibidos.map((grupo) => (
                     <Link href={`/dashboard/grupos/${grupo.id}`} className="bg-primary-red p-4 rounded-md text-white flex justify-between items-center shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1)]" key={grupo.id}>
                         <h1 className="font-semibold">{grupo.nomeGrupo}</h1>
                         <ArrowRight />
