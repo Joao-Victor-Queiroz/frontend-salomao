@@ -17,12 +17,14 @@ export const CARGO_LABELS: Record<Cargo, string> = {
   [Cargo.COORDENADOR_MUSICA]: "Coordenador de Música",
   [Cargo.COORDENADOR_PESCARIA]: "Coordenador de Pescaria",
   [Cargo.COORDENADOR_LEMBRANCINHA]: "Coordenador de Lembrancinha",
+  [Cargo.COORDENADOR_INTERCESSAO]: "Coordenador de Intercessão",
   [Cargo.ANIMADOR_FREQUENCIA]: "Animador de Frequência",
   [Cargo.ANIMADOR_CAIXINHA]: "Animador de Caixinha",
   [Cargo.ANIMADOR_PESCARIA]: "Animador de Pescaria",
   [Cargo.ANIMADOR_COMUNICACAO]: "Animador de Comunicação",
   [Cargo.ANIMADOR_MUSICA]: "Animador de Música",
   [Cargo.ANIMADOR_LEMBRANCINHA]: "Animador de Lembrancinha",
+  [Cargo.ANIMADOR_INTERCESSAO]: "Animador de Intercessão",
   [Cargo.ANIMADOR]: "Animador",
 };
 

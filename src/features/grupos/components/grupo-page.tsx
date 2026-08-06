@@ -19,7 +19,8 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Trash } from "lucide-react";
+import { ChevronDown, Loader2, Trash, User } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ConfirmarAcaoDialog } from "@/components/confirmar-acao-dialog";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { GrupoRelatorioPDF } from "../PDFReport/grupo-relatorio-pdf";
@@ -36,6 +37,7 @@ export function GrupoPageDetails({ grupo } : Props){
     const [openDialog, setOpenDialog] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [crismandoSelecionadoId, setCrismandoSelecionadoId] = useState<string | null>(null);
+    const [isAnimadoresOpen, setIsAnimadoresOpen] = useState(false);
     const isMounted = useIsMounted();
 
     const animadoresDoGrupo = Array.from(
@@ -75,26 +77,70 @@ export function GrupoPageDetails({ grupo } : Props){
                 <Link href={`/dashboard/grupos/${grupo.id}/frequencia`} className={buttonVariants()}>Registrar Frequência</Link>
             </div>
 
-            <div>
-                <h3 className='font-bold mt-8 text-2xl'>Animadores</h3>
-                <div className='grid grid-cols-2 mt-4 gap-4 md:grid-cols-3 lg:grid-cols-4'>
-                    {animadoresDoGrupo.length === 0 && <p className="text-muted-foreground col-span-full">Nenhum animador no grupo.</p>}
-
-                    {animadoresDoGrupo.map((animador, index) => (
-                        <Card key={`animador-${animador.id}-${index}`}>
-                            <CardHeader>
-                                <CardTitle className='line-clamp-1'>{animador.nomeAnimador}</CardTitle>
-                                <Badge variant="outline" className="w-fit mt-1">{formatCargo(animador.cargo)}</Badge>
-                            </CardHeader>
-                            <CardFooter>
-                                <Link href={`/dashboard/animadores/${animador.id}`} className={cn(buttonVariants({ variant: "outline" }), 'w-full text-xs')}>
-                                    Ver detalhes
-                                </Link>
-                            </CardFooter>
-                        </Card>
-                    ))}
+            <Collapsible open={isAnimadoresOpen} onOpenChange={setIsAnimadoresOpen} className="mt-8">
+                <div className="flex items-center justify-between">
+                    <CollapsibleTrigger
+                        className="flex items-center gap-2 text-lg font-bold py-3.5 px-4 rounded-xl border border-border bg-card hover:bg-muted/50 transition-colors w-full justify-between shadow-sm cursor-pointer"
+                    >
+                        <div className="flex items-center gap-2">
+                            <User className="h-5 w-5 text-primary" />
+                            <span>Animadores ({animadoresDoGrupo.length})</span>
+                        </div>
+                        <ChevronDown className={cn("h-5 w-5 transition-transform duration-200 text-muted-foreground", isAnimadoresOpen && "rotate-180")} />
+                    </CollapsibleTrigger>
                 </div>
-            </div>
+
+                <CollapsibleContent className="mt-3">
+                    {animadoresDoGrupo.length === 0 ? (
+                        <div className="bg-card border rounded-xl p-6 text-center text-muted-foreground shadow-sm">
+                            Nenhum animador no grupo.
+                        </div>
+                    ) : (
+                        <div className="bg-card border rounded-xl shadow-sm overflow-hidden">
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-sm text-left">
+                                    <thead className="bg-muted/50 text-muted-foreground font-medium border-b">
+                                        <tr>
+                                            <th className="py-3.5 px-4">Nome</th>
+                                            <th className="py-3.5 px-4">Cargo / Ministério</th>
+                                            <th className="py-3.5 px-4 text-right">Faltas</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-border">
+                                        {animadoresDoGrupo.map((animador, index) => {
+                                            const numeroFaltas = animador.frequencias?.filter(f => f.status !== 'P').length || 0;
+                                            return (
+                                                <tr key={`animador-${animador.id}-${index}`} className="hover:bg-muted/30 transition-colors">
+                                                    <td className="py-3.5 px-4 font-semibold text-foreground flex items-center gap-2">
+                                                        <div className="p-1.5 bg-primary/10 text-primary rounded-full">
+                                                            <User size={16} />
+                                                        </div>
+                                                        {animador.nomeAnimador}
+                                                    </td>
+                                                    <td className="py-3.5 px-4">
+                                                        <Badge variant="outline">{formatCargo(animador.cargo)}</Badge>
+                                                    </td>
+                                                    <td className="py-3.5 px-4 text-right">
+                                                        {numeroFaltas === 0 ? (
+                                                            <Badge className="bg-emerald-500">0 faltas</Badge>
+                                                        ) : numeroFaltas < 4 ? (
+                                                            <Badge className="bg-green-500">{numeroFaltas} falta(s)</Badge>
+                                                        ) : numeroFaltas < 6 ? (
+                                                            <Badge className="bg-yellow-500">{numeroFaltas} falta(s)</Badge>
+                                                        ) : (
+                                                            <Badge className="bg-red-500">{numeroFaltas} falta(s)</Badge>
+                                                        )}
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    )}
+                </CollapsibleContent>
+            </Collapsible>
 
             <div>
                 <h3 className='font-bold mt-8 text-2xl'>Crismandos</h3>
