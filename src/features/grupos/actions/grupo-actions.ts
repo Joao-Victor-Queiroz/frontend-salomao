@@ -136,4 +136,27 @@ export async function addAnimadoresAoGrupo(grupoId: string, animadores: string[]
         console.log('Mensagem de erro: ', errorMessage);
         return { success: false, message: errorMessage };
     }
+}
+
+export async function removeAnimadorDoGrupo(grupoId: string, animadorId: string) {
+    try {
+        const api = await apiAxios();
+
+        await api.patch(`/grupo/remover-animador/${grupoId}/${animadorId}`);
+
+        revalidatePath(`/dashboard/grupos/${grupoId}`);
+        revalidatePath('/dashboard/animadores');
+
+        return { success: true, message: 'Animador removido do grupo com sucesso!' };
+    } catch (error: unknown) {
+        let errorMessage = 'Erro desconhecido';
+
+        if (isAxiosError(error)) {
+            errorMessage = error.response?.data?.message || errorMessage;
+        } else if (error instanceof Error) {
+            errorMessage = error.message;
+        }
+        console.log('Mensagem de erro: ', errorMessage);
+        return { success: false, message: errorMessage };
+    }
 }

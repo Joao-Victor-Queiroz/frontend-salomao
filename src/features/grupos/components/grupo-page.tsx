@@ -10,8 +10,10 @@ import { Crismando } from "@/features/crismandos";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { getCrismandosSemGrupo } from "@/features/crismandos";
 import { Button } from "@/components/ui/button";
-import { addCrismandosAoGrupo, removeCrismandoDoGrupo } from "../actions";
+import { addCrismandosAoGrupo, removeCrismandoDoGrupo, removeAnimadorDoGrupo } from "../actions";
 import { cn } from "@/lib/utils";
+import { Cargo, useAuth } from "@/features/auth";
+import { doesCargoMatches } from "@/lib/cargo-matches";
 import * as z from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -34,11 +36,23 @@ type Props = {
 }
 
 export function GrupoPageDetails({ grupo } : Props){
+    const { user } = useAuth();
     const [openDialog, setOpenDialog] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [crismandoSelecionadoId, setCrismandoSelecionadoId] = useState<string | null>(null);
+
+    const [openAnimadorDialog, setOpenAnimadorDialog] = useState(false);
+    const [animadorSelecionadoId, setAnimadorSelecionadoId] = useState<string | null>(null);
+    const [isRemovingAnimador, setIsRemovingAnimador] = useState(false);
+
     const [isAnimadoresOpen, setIsAnimadoresOpen] = useState(false);
     const isMounted = useIsMounted();
+
+    const canRemoveAnimador = user ? doesCargoMatches(user.cargo, [
+        Cargo.ADMIN,
+        Cargo.COORDENADOR_FREQUENCIA,
+        Cargo.COORDENADOR_GERAL
+    ]) : false;
 
     const animadoresDoGrupo = Array.from(
         new Map((grupo.animadoresMinisterio || grupo.animadores || []).map(a => [a.id, a])).values()
@@ -63,6 +77,22 @@ export function GrupoPageDetails({ grupo } : Props){
         toast.success(`${response.message}`)
 
     }
+
+    const handleRemoverAnimador = async ({ grupoId, animadorId }: { grupoId: string; animadorId: string }) => {
+        setIsRemovingAnimador(true);
+
+        const response = await removeAnimadorDoGrupo(grupoId, animadorId);
+
+        setIsRemovingAnimador(false);
+        setOpenAnimadorDialog(false);
+
+        if (!response.success) {
+            toast.error(`${response.message}`);
+            return;
+        }
+
+        toast.success(`${response.message}`);
+    };
     return(
         <main>
             <SectionTitle isIcon title={grupo.nomeGrupo}/>
@@ -104,6 +134,7 @@ export function GrupoPageDetails({ grupo } : Props){
                                             <th className="py-3.5 px-4">Nome</th>
                                             <th className="py-3.5 px-4">Cargo / Ministério</th>
                                             <th className="py-3.5 px-4 text-right">Faltas</th>
+                                            {canRemoveAnimador && <th className="py-3.5 px-4 text-right">Ações</th>}
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-border">
@@ -131,6 +162,22 @@ export function GrupoPageDetails({ grupo } : Props){
                                                             <Badge className="bg-red-500">{numeroFaltas} falta(s)</Badge>
                                                         )}
                                                     </td>
+                                                    {canRemoveAnimador && (
+                                                        <td className="py-3.5 px-4 text-right">
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                className="text-destructive hover:text-destructive hover:bg-destructive/10 h-8 w-8"
+                                                                onClick={() => {
+                                                                    setAnimadorSelecionadoId(animador.id);
+                                                                    setOpenAnimadorDialog(true);
+                                                                }}
+                                                                title="Remover animador do grupo"
+                                                            >
+                                                                <Trash className="h-4 w-4" />
+                                                            </Button>
+                                                        </td>
+                                                    )}
                                                 </tr>
                                             );
                                         })}
@@ -193,6 +240,17 @@ export function GrupoPageDetails({ grupo } : Props){
                 onConfirmar={() => {
                     if (!crismandoSelecionadoId) return;
                     handleRemoverCrismando({ grupoId: grupo.id, crismandoId: crismandoSelecionadoId });
+                }}
+            />
+            <ConfirmarAcaoDialog
+                open={openAnimadorDialog}
+                onClose={() => setOpenAnimadorDialog(false)}
+                isLoading={isRemovingAnimador}
+                titulo="Remover animador do grupo"
+                descricao="Tem certeza que deseja remover este animador do grupo? Ele não será excluído do sistema."
+                onConfirmar={() => {
+                    if (!animadorSelecionadoId) return;
+                    handleRemoverAnimador({ grupoId: grupo.id, animadorId: animadorSelecionadoId });
                 }}
             />
         </main>
