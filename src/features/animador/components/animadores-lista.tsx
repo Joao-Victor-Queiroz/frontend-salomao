@@ -6,7 +6,7 @@ import { Animador } from "../types";
 import { SectionTitle } from "@/components/section-title";
 import { buttonVariants, Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { UserCheck, Plus, ArrowRight, User, Shield } from "lucide-react";
+import { UserCheck, Plus, ArrowRight, User, Shield, ClipboardCheck } from "lucide-react";
 import { Cargo, useAuth } from "@/features/auth";
 import { doesCargoMatches } from "@/lib/cargo-matches";
 
@@ -51,13 +51,28 @@ export function AnimadoresLista({ animadores }: Props) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <SectionTitle title="Animadores" />
         {canCreateOrEdit && (
-          <Link
-            href="/dashboard/animadores/novo"
-            className={cn(buttonVariants(), "bg-primary-red hover:bg-primary-red/90 text-white px-5 py-2.5 flex items-center gap-2 rounded-lg font-medium shadow-sm transition-all")}
-          >
-            <Plus size={18} />
-            Novo Animador
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/dashboard/animadores/frequencia"
+              className={cn(
+                buttonVariants({ variant: "outline" }),
+                "border-primary-red/30 hover:bg-primary-red/10 text-primary-red flex items-center gap-2 rounded-lg font-medium shadow-sm transition-all"
+              )}
+            >
+              <ClipboardCheck size={18} />
+              Frequência dos Animadores
+            </Link>
+            <Link
+              href="/dashboard/animadores/novo"
+              className={cn(
+                buttonVariants(),
+                "bg-primary-red hover:bg-primary-red/90 text-white px-5 py-2.5 flex items-center gap-2 rounded-lg font-medium shadow-sm transition-all"
+              )}
+            >
+              <Plus size={18} />
+              Novo Animador
+            </Link>
+          </div>
         )}
       </div>
 
@@ -107,7 +122,7 @@ export function AnimadoresLista({ animadores }: Props) {
                         <span className="flex items-center gap-1 text-foreground/70">
                           <User size={12} /> Usuário vinculado:
                         </span>
-                        <span className="font-mono text-foreground/90 truncate max-w-[150px]">
+                        <span className="font-mono text-foreground/90 truncate max-w-37.5">
                           {animador.usuario.email}
                         </span>
                       </div>

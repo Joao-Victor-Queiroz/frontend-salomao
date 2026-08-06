@@ -8,7 +8,7 @@ import { doesCargoMatches } from "@/lib/cargo-matches";
 import { SectionTitle } from "@/components/section-title";
 import { buttonVariants, Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { UserCheck, Shield, Calendar, Users, User, Edit3, ArrowLeft, Trash2 } from "lucide-react";
+import { UserCheck, Shield, Calendar, Users, User, Edit3, ArrowLeft, Trash2, ClipboardCheck } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { deleteAnimador } from "../actions";
@@ -70,6 +70,8 @@ export function AnimadorDetalhe({ animador }: Props) {
       </div>
     );
   }
+
+  const frequencias = animador.frequencias || [];
 
   return (
     <div className="space-y-6">
@@ -182,6 +184,78 @@ export function AnimadorDetalhe({ animador }: Props) {
           </div>
         </div>
       </div>
+
+      {/* SEÇÃO: HISTÓRICO DE FREQUÊNCIAS */}
+      <div className="bg-card border rounded-xl p-6 shadow-sm space-y-4">
+        <h3 className="text-lg font-semibold border-b pb-3 flex items-center gap-2 text-foreground">
+          <ClipboardCheck size={20} className="text-emerald-600" /> Histórico de Frequência do Animador
+        </h3>
+
+        {frequencias.length === 0 ? (
+          <p className="text-sm text-muted-foreground text-center py-6">
+            Nenhum registro de frequência encontrado para este animador.
+          </p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-left">
+              <thead className="bg-muted/50 text-muted-foreground font-medium border-b">
+                <tr>
+                  <th className="py-3 px-4">Data</th>
+                  <th className="py-3 px-4">Tipo</th>
+                  <th className="py-3 px-4">Status</th>
+                  <th className="py-3 px-4">Justificativa</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {frequencias.map((f) => {
+                  const dateStr = f.dataFrequencia
+                    ? new Date(f.dataFrequencia).toLocaleDateString("pt-BR", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                        timeZone: "UTC",
+                      })
+                    : "-";
+
+                  const tipoText = f.tipo === "FORMACAO" ? "Formação" : "Encontro";
+
+                  return (
+                    <tr key={f.id} className="hover:bg-muted/30 transition-colors">
+                      <td className="py-3 px-4 font-mono">{dateStr}</td>
+                      <td className="py-3 px-4">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-500/10 text-blue-600 dark:text-blue-400">
+                          {tipoText}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4">
+                        {f.status === "P" && (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                            Presente (P)
+                          </span>
+                        )}
+                        {f.status === "FNJ" && (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-destructive/10 text-destructive">
+                            Falta N/J (FNJ)
+                          </span>
+                        )}
+                        {f.status === "FJ" && (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-600 dark:text-amber-400">
+                            Falta Justificada (FJ)
+                          </span>
+                        )}
+                      </td>
+                      <td className="py-3 px-4 text-muted-foreground text-xs italic">
+                        {f.justificativa || "-"}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
+

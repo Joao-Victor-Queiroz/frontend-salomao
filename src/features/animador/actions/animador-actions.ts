@@ -110,3 +110,38 @@ export async function deleteAnimador(id: string) {
     return { success: false, message: errorMessage };
   }
 }
+
+export async function registrarFrequenciaAnimadores(data: {
+  dataFrequencia: string;
+  frequencias: Array<{
+    animadorId: string;
+    tipo: "FORMACAO" | "ENCONTRO";
+    status: "P" | "FNJ" | "FJ";
+    justificativa?: string | null;
+  }>;
+}) {
+  try {
+    const api = await apiAxios();
+
+    const response = await api.post("/frequencia/frequencia-animadores", data);
+    revalidatePath("/dashboard/animadores");
+
+    return {
+      success: true,
+      data: response.data,
+      message: "Frequência dos animadores registrada com sucesso!",
+    };
+  } catch (error: unknown) {
+    let errorMessage = "Erro desconhecido ao registrar frequência dos animadores";
+
+    if (isAxiosError(error)) {
+      errorMessage = error.response?.data?.message || errorMessage;
+    } else if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+
+    console.error("Mensagem de erro:", errorMessage);
+    return { success: false, message: errorMessage };
+  }
+}
+
