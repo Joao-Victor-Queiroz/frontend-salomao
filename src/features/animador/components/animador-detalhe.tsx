@@ -18,6 +18,8 @@ import { useIsMounted } from "@/hooks/use-is-mounted";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { AnimadorRelatorioPDF } from "../PDFReport/animador-relatorio-pdf";
 
+import { ConfirmarAcaoDialog } from "@/components/confirmar-acao-dialog";
+
 type Props = {
   animador: Animador;
 };
@@ -28,6 +30,7 @@ export function AnimadorDetalhe({ animador }: Props) {
   const isClient = useIsMounted();
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const canEdit = user && doesCargoMatches(user.cargo, [
     Cargo.ADMIN,
@@ -47,18 +50,17 @@ export function AnimadorDetalhe({ animador }: Props) {
     : "Não informada";
 
   const handleDelete = async () => {
-    if (confirm(`Tem certeza que deseja excluir o animador "${animador.nomeAnimador}"?`)) {
-      setIsDeleting(true);
-      const res = await deleteAnimador(animador.id);
-      setIsDeleting(false);
+    setIsDeleting(true);
+    const res = await deleteAnimador(animador.id);
+    setIsDeleting(false);
 
-      if (res.success) {
-        toast.success("Animador removido com sucesso!");
-        router.push("/dashboard/animadores");
-        router.refresh();
-      } else {
-        toast.error(res.message || "Erro ao remover animador.");
-      }
+    if (res.success) {
+      setIsConfirmOpen(false);
+      toast.success("Animador removido com sucesso!");
+      router.push("/dashboard/animadores");
+      router.refresh();
+    } else {
+      toast.error(res.message || "Erro ao remover animador.");
     }
   };
 
@@ -115,7 +117,7 @@ export function AnimadorDetalhe({ animador }: Props) {
               <Button
                 variant="destructive"
                 size="icon"
-                onClick={handleDelete}
+                onClick={() => setIsConfirmOpen(true)}
                 disabled={isDeleting}
                 title="Excluir Animador"
               >
@@ -274,6 +276,15 @@ export function AnimadorDetalhe({ animador }: Props) {
           </div>
         )}
       </div>
+
+      <ConfirmarAcaoDialog
+        open={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        onConfirmar={handleDelete}
+        isLoading={isDeleting}
+        titulo="Excluir Animador"
+        descricao={`Tem certeza que deseja excluir o animador "${animador.nomeAnimador}"? Esta ação não pode ser desfeita.`}
+      />
     </div>
   );
 }
