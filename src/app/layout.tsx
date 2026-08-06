@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Projeto Salomão",
+  title: "Salomão - Crisma SMR",
   description: "Aplicação de gerenciamento pastoral para facilitar nossa vida",
 };
 
